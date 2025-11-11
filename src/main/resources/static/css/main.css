@@ -35,7 +35,7 @@ mainPage
 
 /*메인 페이지 > 공통*/
 .main {margin-bottom: 40px;}
-.main .tit_box {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+.main .tit_box {display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;}
 .main .tit_box h1{font-size: 22px; font-weight: 600; font-family: 'GMarketSans'; line-height: 1.3;}
 .main .tit_box a{font-size: 16px; font-weight: 600; text-decoration: underline;}
 
@@ -46,7 +46,7 @@ mainPage
 /*메인 페이지 > 메인 비쥬얼*/
 .main{overflow: hidden;}
 .main .visu{overflow: hidden; background: #F7FEFE; padding-top: 50px; width: 100%;}
-.main .visu .inner{display: flex; align-items: start; justify-content: space-between; position: relative; padding:100px 0;}
+.main .visu .inner{display: flex; align-items: start; justify-content: space-between; position: relative; padding:100px 12px;}
 .main .visu .txt{margin-top: 100px; z-index: 1;}
 .main .visu .txt span{font-size: 22px; font-weight: 600; color: #535353;}
 .main .visu .txt h1{font-size: 36px; font-family: 'GMarketSans'; margin-top: 12px; font-weight: 600;}
@@ -59,11 +59,11 @@ mainPage
 /*메인 페이지 > 신상도서*/
 .section_new{padding:80px 0; border-radius: 0 0 0 100px; position: relative; background: #fff;}
 .section_new::before{content: ""; display: block; width: 200px; height: 200px; background: #F7F7F7; position: absolute; left: 0; bottom: 0; z-index: -1;}
-.section_new .tab button{cursor: pointer; border-radius: 32px; color: #999; position: relative; background: none; border: none; font-size: 17px; padding: 10px 24px; border: 1px solid #ddd;}
+.section_new .tab button{font-family: 'Pretendard'; cursor: pointer; border-radius: 32px; color: #999; position: relative; background: none; border: none; font-size: 17px; padding: 10px 24px; border: 1px solid #ddd;}
 .section_new .tab li.on button{color:#fff;background: var( --point-color); border: none; font-weight: 700;}
 .section_new .tab li:not(.on):hover button{color: var( --point-color);}
 .new_book_swiper{clip-path: inset(0 -100% 0 0px);}
-.main .new_book_list{display: flex; align-items: top; overflow: visible;}
+.main .new_book_list{display: flex; align-items: start; overflow: visible;}
 .main .new_book_list .itm{width: 200px;}
 .main .new_book_list .itm .img{width: 100%; height: 270px; overflow: hidden;}
 .main .new_book_list .itm .img img{width: 100%; height: 100%; object-fit: cover; transition: all .3s;}
@@ -77,7 +77,7 @@ mainPage
 .main .new_book_list .itm.swiper-slide-active .img{height: 400px; width: 300px; border-radius: 12px; box-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);}
 .main .new_book_list .itm.swiper-slide-active .txt{width: calc(100% - 300px);}
 .main .new_book_list .itm .label{padding: 4px 8px; font-size: 15px; margin-bottom: 12px; display: inline-block; position: relative}
-.main .new_book_list .itm .tit{font-size: 18px; word-break: keep-all; margin-bottom: 12px; line-height: 1.5;}
+.main .new_book_list .itm .tit{font-size: 20px; word-break: keep-all; margin-bottom: 12px; line-height: 1.5; font-weight: 500;}
 .main .new_book_list .itm .author{font-size: 15px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap}
 .main .new_book_list .itm .price{color: #000; font-size: 16px; margin-top: 20px;}
 .new_book_swiper .swiper-util{display: flex; margin-top: 20px; align-items: center; gap: 20px;}
@@ -102,22 +102,22 @@ mainPage
 .section_best .navigation {display: flex; gap: 10px;}
 .section_best .navigation a{width: 50px; height: 50px; display: flex; border:1px solid #ddd; border-radius: 50px; align-items: center; justify-content: center;}
 .section_best .navigation a img{width: 10px; height: auto;}
-.main .best_book_list{display: flex; align-items: start;}
-.main .best_book_list .label{padding: 4px 8px; font-size: 14px; position: absolute; top: 20px; left: 20px; z-index: 1;}
-.main .best_book_list .itm{width: 240px; position: relative; padding: 20px; padding: 20px; background: #fff;}
+.main .best_book_list{display: flex; align-items: start; gap: 40px;}
+.main .best_book_list .label{padding: 4px 8px; font-size: 14px; position: absolute; top: 0; left: 0px; z-index: 1;}
+.main .best_book_list .itm{width: 240px; position: relative; background: #fff;}
 .main .best_book_list .itm .img{height: 270px; margin-bottom: 12px; overflow: hidden;}
 .main .best_book_list .itm .img img{width: 100%; height: 100%; object-fit: cover; transition: all .3s;}
 .main .best_book_list .itm:hover .img img{transform: scale(1.1);}
-.main .best_book_list .itm .title{ background: #fff; font-size: 15px; color: #555; font-weight: 700; margin-bottom: 12px;}
-.main .best_book_list .itm .author{font-size: 14px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap}
+.main .best_book_list .itm .tit{ background: #fff; font-size: 18px; color: #555; font-weight: 700; }
+.main .best_book_list .itm .author{margin:10px 0; font-size: 14px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap}
+.main .best_book_list .itm .price{font-size: 16px;}
 
-/*메인 페이지 > 중고상품 */
+    /*메인 페이지 > 중고상품 */
 .section_used{padding: 80px 0;}
 .section_used .tit_box a{padding: 12px 20px; border: 1px solid #000; text-decoration: none;}
-.section_used .used_list{display: flex; gap: 50px;}
-.section_used .used_list .itm{width: calc((100% - 150px) / 4);}
-.section_used .used_list .itm:nth-child(odd) .img{width: 100%; height: 280px;}
-.section_used .used_list .itm:nth-child(even) .img{width: 100%; height: 340px;}
+.section_used .used_list{display: flex; gap: 80px;}
+.section_used .used_list .itm{width: calc((100% - 240px) / 4);}
+.section_used .used_list .itm .img{width: 100%; height: 300px;}
 .section_used .used_list .itm img{width: 100%; height: 100%; object-fit: cover;}
 .section_used .used_list .itm .txt{position: relative;}
 .section_used .used_list .itm .title{font-size: 16px; margin-top: 20px; padding-right: 30px;}
@@ -151,12 +151,12 @@ mainPage
 
 /*애니메이션*/
 .animation {
-    transform: skew(10deg, 10deg) translateY(-100px);
+    transform: translateY(100px);
     opacity: 0;
     transition: transform .5s, opacity .5s;
 }
 .animation.active {
-    transform: translateY(0) skew(0, 0);
+    transform: translateY(0);
     opacity: 1;
 }
 .visu .txt{
@@ -190,4 +190,5 @@ mainPage
     .section_noti .inner{flex-direction: column;}
     .section_noti .tit_box{flex-direction: row; width: 100%;}
     .section_noti .noti_list{width:100%;}
+
 }

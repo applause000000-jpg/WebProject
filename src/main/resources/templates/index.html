@@ -158,8 +158,8 @@
                                 정상판매가보다 <span th:text="${product.discount}"></span> 저렴해요!
                             </p>
                             <div class="btn_box">
-                                <button>장바구니</button>
-                                <button>구매하기</button>
+                                <button class="goCart" type="button">장바구니</button>
+                                <button class="buyNowBtn" type="button">구매하기</button>
                             </div>
                             <div class="info_box" th:if="${product.conditions != null}">
                                 <i>?</i>
@@ -193,4 +193,141 @@
         </div>
         <!-- E : 공지사항 상품-->
     </main>
+    <div class="pop_wrap" id="loginPopup">
+        <div class="popup">
+            <img src="../img/sub/alert.svg" alt="">
+            <h3>로그인이 필요한 서비스입니다.</h3>
+            <p>로그인하러 가시겠습니까?</p>
+            <div class="btn_wrap">
+                <a class="btn01 loginBtn" href="/member/login">로그인</a>
+                <a class="btn02 cancle_btn">취소</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop_wrap" id="cartAddPopup">
+        <div class="popup">
+            <img src="../img/sub/alert.svg" alt="">
+            <h3>장바구니 담기 완료!</h3>
+            <p>상품이 장바구니에 담겼습니다.<br>
+                장바구니 페이지로 이동하시겠습니까?
+            </p>
+            <div class="btn_wrap">
+                <a class="btn01" href="/cart/list">장바구니 바로가기</a>
+                <button class="btn02 cancle_btn">취소</button>
+            </div>
+            <!--            <button class="close_btn" type="button"><img src="../img/sub/close.png"></button>-->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popup = document.querySelector('#cartAddPopup');
+            // const closeBtns = document.querySelector('.close_btn');
+            const cancleBtn = document.querySelectorAll('.cancle_btn');
+            const loginPopup = document.querySelector('#loginPopup');
+            const loginBtn = document.querySelector('.login_btn');
+
+            document.querySelectorAll('.goCart').forEach(button => {
+                button.addEventListener('click', (e) => {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const item = e.target.closest('.itm');
+                    if (!item) return console.error('item not found');
+
+                    const productId = item.dataset.num;
+
+                    //console.log("보낼 productId:", productId, "userId:", userId);
+
+                    fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            productId: productId
+                        }),
+                        redirect: "manual"
+                    })
+                        .then(res => {
+                            console.log("응답 코드:", res.status);
+                            if (res.status === 401 ) { // 비회원시
+                                loginPopup.style.display = 'flex';
+
+                            } else if (res.ok) {
+                                popup.style.display = 'flex';
+                            } else {
+                                alert('이미 장바구니에 존재합니다.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('에러');
+                        });
+                });
+            });
+
+
+            //구매하기 바로가기
+            const buyNowBtn = document.querySelectorAll('.buyNowBtn');
+            buyNowBtn.forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // 상품 li.itm 요소 찾기
+                    const item = e.target.closest('.itm');
+                    if (!item) {
+                        console.error('상품 정보를 찾을 수 없습니다.');
+                        return;
+                    }
+
+                    // data-num 속성에서 productId 읽기
+                    const productId = item.dataset.num;
+                    console.log("구매하기 클릭됨 → productId:", productId);
+
+                    try {
+                        const res = await fetch('/api/authentication/check', { method: 'GET' });
+                        if (res.status === 401) {
+                            // 로그인 안 된 경우
+                            loginPopup.style.display = 'flex';
+                            return;
+                        }
+                    } catch (err) {
+                        console.error('로그인 상태 확인 중 오류:', err);
+                    }
+
+                    // form 생성
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/order/pay';
+
+                    // input 생성
+                    const inputProduct = document.createElement('input');
+                    inputProduct.type = 'hidden';
+                    inputProduct.name = 'productId';
+                    inputProduct.value = productId;
+                    form.appendChild(inputProduct);
+
+                    const inputQty = document.createElement('input');
+                    inputQty.type = 'hidden';
+                    inputQty.name = 'quantity';
+                    inputQty.value = 1;
+                    form.appendChild(inputQty);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            });
+
+            //팝업 닫기
+            document.querySelectorAll('.cancle_btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.pop_wrap').style.display = 'none';
+                });
+            });
+
+        });
+    </script>
+
 </div>

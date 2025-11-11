@@ -19,6 +19,7 @@ import java.util.List;
 @Log4j2
 @Transactional
 public class ProductServiceImpl implements ProductService {
+
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -31,7 +32,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long insertProduct(ProductDTO productDTO) {
         Product product = dtoToEntity(productDTO);
-        User user = memberRepository.findByUsername(productDTO.getUsername());
+
+        // ✅ Optional<User>에서 실제 User 꺼내기 (없으면 null)
+        User user = memberRepository.findByUsername(productDTO.getUsername())
+                .orElse(null);
+
+        // null 체크 (예외 방지)
+        if (user == null) {
+            log.error("⚠️ 등록하려는 사용자를 찾을 수 없습니다: {}", productDTO.getUsername());
+            throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
+        }
+
         product.setUser(user);
         Product saved = productRepository.save(product);
         return saved.getProductId();
@@ -68,14 +79,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(ProductDTO productDTO) {
         Product product = productRepository.findById(productDTO.getProductId()).orElse(null);
-        product.change(productDTO.getPrice(), productDTO.getConditions());
-        productRepository.save(product);
+        if (product != null) {
+            product.change(productDTO.getPrice(), productDTO.getConditions());
+            productRepository.save(product);
+        }
     }
 
     @Override
     public void deleteProduct(Long productId) {
         cartRepository.deleteByProduct_ProductId(productId);
         Product product = productRepository.findById(productId).orElse(null);
-        productRepository.delete(product);
+        if (product != null) {
+            productRepository.delete(product);
+        }
     }
 }

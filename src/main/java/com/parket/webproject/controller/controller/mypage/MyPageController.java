@@ -100,4 +100,19 @@ public class MyPageController {
         model.addAttribute("payMethod", new PayMethod());
         return "mypage/payManagement";
     }
+    // ✅ 계정 탈퇴 처리
+    @PostMapping("/withdrawal")
+    public String withdrawAccount(@AuthenticationPrincipal PrincipalDetails principal) {
+        User user = principal.getUser();
+
+        // 회원 삭제 (실제 DB에서 제거)
+        memberRepository.delete(user);
+
+        // 탈퇴 후 메인 페이지로 이동하면서 성공 메시지 전달
+        return "redirect:/?withdrawalSuccess=true";
+    }
+    @GetMapping("/withdrawal")
+    public String withdrawalPage() {
+        return "mypage/withdrawal"; // join.html 파일이 mypage 폴더 안에 있으면 경로 맞춰주세요
+    }
 }

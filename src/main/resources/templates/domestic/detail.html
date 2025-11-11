@@ -137,7 +137,7 @@
             //구매하기 바로가기
             const buyNowBtn = document.querySelectorAll('.buyNowBtn');
             buyNowBtn.forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -151,6 +151,17 @@
                     // data-num 속성에서 productId 읽기
                     const productId = item.dataset.num;
                     console.log("구매하기 클릭됨 → productId:", productId);
+
+                    try {
+                        const res = await fetch('/api/authentication/check', { method: 'GET' });
+                        if (res.status === 401) {
+                            // 로그인 안 된 경우
+                            loginPopup.style.display = 'flex';
+                            return;
+                        }
+                    } catch (err) {
+                        console.error('로그인 상태 확인 중 오류:', err);
+                    }
 
                     // form 생성
                     const form = document.createElement('form');
