@@ -1,0 +1,107 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page my_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>마이페이지</h3>
+            </div>
+            <div class="flex__box">
+                <div class="sub__nav__wrap">
+                    <div class="sub__nav">
+                        <a href="/mypage/info" class="top">
+                            <p>반갑습니다. <br>
+                                <span th:text="${user.username + '님'}"></span>
+                            </p>
+                        </a>
+                        <ul class="sub__nav__list">
+                            <li class="sub__nav__itm">
+                                <h3>판매</h3>
+                                <a href="/mypage/writeList">작성한 글</a>
+                                <a href="/mypage/saleComplete">판매 완료 도서</a>
+                            </li>
+                            <li class="sub__nav__itm">
+                                <h3>구매</h3>
+                                <a href="/mypage/orderList">나의 주문내역</a>
+                                <a href="/mypage/payManagement">결제수단관리</a>
+                            </li>
+                            <li class="sub__nav__itm">
+                                <a href="/mypage/withdrawal">계정탈퇴</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="con">
+                    <h3 class="mypage__sub__tit">회원정보</h3>
+                    <form action="/mypage/infoModify" method="post" class="member_form">
+                        <table class="info__table">
+                            <tr>
+                                <td>이름</td>
+                                <td><input type="text" th:value="${user.name}" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>아이디</td>
+                                <td><input type="text" th:value="${user.username}" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호 변경</td>
+                                <td><input type="password" id="password" name="password" placeholder="새 비밀번호를 입력해주세요" class="input_pw"></td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호 확인</td>
+                                <td><input type="password" id="confirmPassword" placeholder="새 비밀번호를 입력해주세요" class="input_pw"></td>
+                                <p id="passwordMessage" style="color:red; display:none; font-size: 14px" >비밀번호가 일치하지 않습니다.</p>
+                            </tr>
+                            <tr>
+                                <td>주소</td>
+                                <td><input type="text" name="address" th:value="${user.address}"></td>
+                            </tr>
+                        </table>
+                        <div class="btn_wrap">
+                            <button type="button" onclick="location.href='/mypage/info'" class="btn01">마이페이지</button>
+                            <button type="submit" id="submitBtn" class="btn01" disabled>회원정보수정</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const password = document.getElementById("password");
+            const confirmPassword = document.getElementById("confirmPassword");
+            const message = document.getElementById("passwordMessage");
+            const submitBtn = document.getElementById("submitBtn");
+
+            function validatePassword() {
+                const pw = password.value.trim();
+                const cpw = confirmPassword.value.trim();
+
+                // 비밀번호를 입력하지 않은 경우 → 수정 가능
+                if (pw === "" && cpw === "") {
+                    message.style.display = "none";
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                // 비밀번호를 입력한 경우 → 일치해야 수정 가능
+                if (pw === cpw) {
+                    message.style.display = "none";
+                    submitBtn.disabled = false;
+                } else {
+                    message.style.display = "block";
+                    submitBtn.disabled = true;
+                }
+            }
+
+            validatePassword();
+
+            password.addEventListener("input", validatePassword);
+            confirmPassword.addEventListener("input", validatePassword);
+        });
+
+        document.getElementById("address").addEventListener("input", validatePassword);
+    </script>
+</div>

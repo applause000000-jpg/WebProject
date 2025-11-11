@@ -1,0 +1,233 @@
+<!--유빈 장바구니 테스트 중고장터-->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>중고장터</h3>
+            </div>
+            <div class="board_search">
+                <form action="">
+                    <div class="search_con">
+                        <div class="select_box">
+                            <select>
+                                <option>전체</option>
+                                <option>제목</option>
+                                <option>저자</option>
+                            </select>
+                        </div>
+                        <input type="text" value="키워드를 입력해주세요.">
+                        <input type="submit" value="">
+                    </div>
+                </form>
+            </div>
+            <div class="board_info">
+                <div>
+                    <p>총 <span class="count">23</span> 개의 상품</p>
+                </div>
+                <div class="sort_btn_wrap">
+                    <button class="on" type="button">최신순</button>
+                    <button type="button">인기순</button>
+                </div>
+            </div>
+            <!--로그인시에만-->
+            <a href="/product/write" class="btn01 writebtn" sec:authorize="isAuthenticated()">글쓰기</a>
+            <div class="use_product_wrap">
+                <ul class="use_product_list animation active">
+                    <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}" th:if="${!product.isSold}">
+                        <div class="img_wrap">
+                            <div class="img">
+                                <img th:src="${product.bookImageUrl != null} ? ${product.bookImageUrl} : '/img/main/sample.jpg'"
+                                     alt="도서 이미지">
+                            </div>
+                        </div>
+                        <div class="txt">
+                            <p class="title">
+                                <span>[중고] </span><span th:text="${product.title}">제목</span>
+                            </p>
+                            <div class="price">
+                                <p class="price"
+                                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">
+                                    <span th:if="${product.isSold}" class="sold">판매 완료</span>
+                                </p>
+                                <span>[[${product.realPrice}]]</span>
+                            </div>
+                            <div class="btn_box"
+                                 th:if="${principal == null or product.username != principal.user.username}">
+                                <button class="on goCart" type="button">장바구니</button>
+                                <button class="buyNowBtn" type="button">구매하기</button>
+                            </div>
+                            <div class="info_box" th:if="${product.conditions != null}">
+                                <i>?</i>
+                                <div th:text="${product.conditions}">찢어짐, 표지없음</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pagenation_wrap">
+
+                <!-- Paging script goPage() -->
+                <p class="pagenation"><a href="#" data-role="goPage" data-page="1" class="first angle-left-thin"
+                                         aria-label="Previous"></a><a href="#" data-role="goPage" class="arrow-left"
+                                                                      data-page="1" aria-label="dec"></a><strong
+                        href="#" class="active" data-role="goPage" data-page="1">1</strong><a href="#"
+                                                                                              data-role="goPage"
+                                                                                              data-page="2">2</a><a
+                        href="#" data-role="goPage" data-page="3">3</a><a href="#" data-role="goPage"
+                                                                          data-page="4">4</a><a href="#"
+                                                                                                data-role="goPage"
+                                                                                                data-page="5">5</a><a
+                        href="#" data-role="goPage" data-page="6">6</a><a href="#" data-role="goPage"
+                                                                          data-page="7">7</a><a href="#"
+                                                                                                data-role="goPage"
+                                                                                                data-page="8">8</a><a
+                        href="#" data-role="goPage" data-page="9">9</a><a href="#" data-role="goPage"
+                                                                          data-page="10">10</a><a href="#"
+                                                                                                  data-role="goPage"
+                                                                                                  class="arrow-right"
+                                                                                                  data-page="2"
+                                                                                                  aria-label="inc"></a><a
+                        href="#" data-role="goPage" data-page="11" class="last angle-right-thin" aria-label="Next"></a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pop_wrap" id="loginPopup">
+        <div class="popup">
+            <img src="../img/sub/alert.svg" alt="">
+            <h3>로그인이 필요한 서비스입니다.</h3>
+            <p>로그인하러 가시겠습니까?</p>
+            <div class="btn_wrap">
+                <a class="btn01 loginBtn" href="/member/login">로그인</a>
+                <a class="btn02 cancle_btn">취소</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop_wrap" id="cartAddPopup">
+        <div class="popup">
+            <img src="../img/sub/alert.svg" alt="">
+            <h3>장바구니 담기 완료!</h3>
+            <p>상품이 장바구니에 담겼습니다.<br>
+                장바구니 페이지로 이동하시겠습니까?
+            </p>
+            <div class="btn_wrap">
+                <a class="btn01" href="/cart/list">장바구니 바로가기</a>
+                <button class="btn02 cancle_btn">취소</button>
+            </div>
+            <!--            <button class="close_btn" type="button"><img src="../img/sub/close.png"></button>-->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popup = document.querySelector('#cartAddPopup');
+            // const closeBtns = document.querySelector('.close_btn');
+            const cancleBtn = document.querySelectorAll('.cancle_btn');
+            const loginPopup = document.querySelector('#loginPopup');
+            const loginBtn = document.querySelector('.login_btn');
+
+            document.querySelectorAll('.goCart').forEach(button => {
+                button.addEventListener('click', (e) => {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const item = e.target.closest('.itm');
+                    if (!item) return console.error('item not found');
+
+                    const productId = item.dataset.num;
+
+                    //console.log("보낼 productId:", productId, "userId:", userId);
+
+                    fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            productId: productId
+                        }),
+                        redirect: "manual"
+                    })
+                        .then(res => {
+                            console.log("응답 코드:", res.status);
+                            if (res.status === 401 ) { // 비회원시
+                                loginPopup.style.display = 'flex';
+
+                            } else if (res.ok) {
+                                popup.style.display = 'flex';
+                            } else {
+                                alert('이미 장바구니에 존재합니다.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('에러');
+                        });
+                });
+            });
+
+
+            //구매하기 바로가기
+            const buyNowBtn = document.querySelectorAll('.buyNowBtn');
+            buyNowBtn.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // 상품 li.itm 요소 찾기
+                    const item = e.target.closest('.itm');
+                    if (!item) {
+                        console.error('상품 정보를 찾을 수 없습니다.');
+                        return;
+                    }
+
+                    // data-num 속성에서 productId 읽기
+                    const productId = item.dataset.num;
+                    console.log("구매하기 클릭됨 → productId:", productId);
+
+                    // form 생성
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/order/pay';
+
+                    // input 생성
+                    const inputProduct = document.createElement('input');
+                    inputProduct.type = 'hidden';
+                    inputProduct.name = 'productId';
+                    inputProduct.value = productId;
+                    form.appendChild(inputProduct);
+
+                    const inputQty = document.createElement('input');
+                    inputQty.type = 'hidden';
+                    inputQty.name = 'quantity';
+                    inputQty.value = 1;
+                    form.appendChild(inputQty);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            });
+
+            //팝업 닫기
+            document.querySelectorAll('.cancle_btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.pop_wrap').style.display = 'none';
+                });
+            });
+
+            //로긴버튼
+            // document.querySelectorAll('.loginBtn').forEach(btn => {
+            //     btn.addEventListener('click', () => {
+            //         window.location.href = '/member/login';
+            //     });
+            // });
+        });
+    </script>
+
+</div>
+

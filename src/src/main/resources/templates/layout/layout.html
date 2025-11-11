@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8"/>
+    <title>책콕</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="1조 포트폴리오"/>
+    <meta property="og:description" content="1조 포트폴리오입니다"/>
+    <meta property="og:site_name" content="1조 포트폴리오"/>
+
+    <link rel="stylesheet" as="style" crossorigin
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/sub.css}"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+<body>
+<!-- header -->
+<header class="header">
+    <div class="hd_search_box">
+        <form id="searchHeaderFrm" name="searchHeaderFrm" method="post" target="_blank" action="" onsubmit="">
+            <input type="hidden" name="searchSite" value="archives"/>
+            <fieldset>
+                <input type="text" id="searchText" name="searchText" value="" title="검색어를 입력하세요"
+                       placeholder="검색어를 입력하세요"/>
+                <input type="submit" value="검색"/>
+            </fieldset>
+        </form>
+        <button class="search_close">검색창 닫기</button>
+    </div>
+    <div class="header__wrap header__inner inner">
+        <div class="header__left">
+            <div class="header__logo">
+                <h1><a href="/">책콕</a></h1>
+            </div>
+            <nav class="flex">
+                <ul class="nav__ul">
+                    <li>
+                        <a href="/domestic/list" class="a_link">국내 도서</a>
+                    </li>
+                    <li>
+                        <a href="/foreign/list" class="a_link">해외 도서</a>
+                    </li>
+                    <li>
+                        <a href="/bookNew/list" class="a_link">신간 도서</a>
+                    </li>
+                    <li>
+                        <a href="/product/list" class="a_link">중고장터</a>
+                    </li>
+                    <li>
+                        <a href="/noti/list" class="a_link">공지사항</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header__right">
+            <ul class="member_box">
+                <!-- 로그인 전 -->
+                <!--                <li><a href="/check">확인</a></li>-->
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/member/join">회원가입</a>
+                    <a href="/member/login">로그인</a>
+                </li>
+                <!-- 로그인 후 -->
+                <li sec:authorize="isAuthenticated()" class="">
+                    <a href="/logout">로그아웃</a>
+                    <a href="/mypage/info">마이페이지</a>
+                </li>
+                <li sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a href="#" class="admin">관리자 페이지</a>
+                </li>
+            </ul>
+            <ul class="util_box">
+                <li class="alarm_area">
+                    <span class="count">1</span>
+                    <button class="alarm_btn">
+                        <img src="/img/common/alarm.png" alt="알람창 열기"/>
+                    </button>
+                    <div class="alam_box">
+                        <!-- 알람 없을 때 -->
+                        <p class="new" th:if="${#lists.isEmpty(notification)}">새 알림이 없습니다.</p>
+                        <!-- 알림 있을 때 -->
+                        <p th:each="noti : ${notifications}" th:text="${noti.message}"></p>
+                    </div>
+                </li>
+                <li class="cart-area">
+                    <a class="cart_btn" href="/cart/list">
+                        <img src="/img/common/cart.png" alt="카트 바로가기"/>
+                    </a>
+                </li>
+                <li class="search-area">
+                    <button class="search_btn">
+                        <img src="/img/common/search.png" alt="검색 바로가기"/>
+                    </button>
+                </li>
+            </ul>
+            <button class="menu_btn">
+                <img src="/img/common/menu.png" alt="모바일메뉴"/>
+            </button>
+            <button class="close_btn">
+                <img src="/img/common/close.png" alt="모바일메뉴닫기"/>
+            </button>
+        </div>
+    </div>
+
+    <!-- 알림 처리 -->
+    <script>
+        async function loadNotification(){
+            try{
+                const res = await fetch('/api/notifications')
+                if(!res.ok) return;
+
+                const data = await res.json();
+                const countEl = document.querySelector('.alarm_area .count');
+                const boxEl = document.querySelector('.alarm_area .alam_box');
+
+                countEl.textContent = data.unreadCount || 0;
+                countEl.textContent = data.length;
+
+                if(data.length===0){
+                    boxEl.innerHTML=`<p class="new"> 새 알람이 없습니다.</p>`;
+                }else{
+                    boxEl.innerHTML = data.map(noti=>`<p>${noti.message}</p>`).join(``);
+                }
+
+                countEl.classList.add('new_alarm');
+                setTimeout(() => countEl.classList.remove('new_alarm'), 700)
+            }catch (e){
+                console.log("알람 오류임")
+            }
+        }
+
+        // 읽음 처리
+        const alarmBtn = document.querySelector('.alarm_btn');
+        const alarmBox = document.querySelector('.alam_box')
+        alarmBtn.addEventListener("click", async () => {
+            alarmBox.classList.toggle('active')
+            try{
+                await fetch('/api/notifications/readAll', {method:'POST'});
+                //읽음 처리 후 알림 리스트 다시 불러오기
+                loadNotification.reload();
+            }catch (e){
+                console.log("알림 처리 실패",e)
+            }
+        })
+
+
+        // 페이지 로드 시 실행, 10초마다 새로고침
+        document.addEventListener('DOMContentLoaded',() => {
+            loadNotification();
+            setInterval(loadNotification, 5000);
+        })
+    </script>
+</header>
+<div class="container-fluid" layout:fragment="content">
+
+</div>
+<!-- Core theme JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="/js/common.js"></script>
+<!--<script src="/js/product.js"></script>-->
+
+<th:block layout:fragment="script"></th:block>
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 책콕. All rights reserved.</p>
+</footer>
+</body>
+</html>

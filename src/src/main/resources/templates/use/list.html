@@ -1,0 +1,169 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>중고장터</h3>
+            </div>
+            <div class="board_search">
+                <form action="">
+                    <div class="search_con">
+                        <div class="select_box">
+                            <select>
+                                <option>전체</option>
+                                <option>제목</option>
+                                <option>저자</option>
+                            </select>
+                        </div>
+                        <input type="text" value="키워드를 입력해주세요.">
+                        <input type="submit" value="">
+                    </div>
+                </form>
+            </div>
+            <div class="board_info">
+                <div>
+                    <p>총 <span class="count">23</span> 개의 상품</p>
+                </div>
+                <div class="sort_btn_wrap">
+                    <button class="on" type="button">최신순</button>
+                    <button type="button">인기순</button>
+                </div>
+            </div>
+            <!--로그인시에만-->
+            <a href="/use/write" class="btn01 writebtn">글쓰기</a>
+            <div class="use_product_wrap">
+                <ul class="use_product_list animation active">
+                    <li class="itm">
+                        <a href="#">
+                            <div class="img_wrap">
+                                <span class="label label01">국내 도서</span>
+                                <div class="img">
+                                    <img src="../img/main/sample.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="txt">
+                                <p class="title"><span>[중고] </span>여름의 비행운</p>
+                                <p class="price">7,000원 <span>3,000원</span></p>
+                                <div class="btn_box">
+                                    <button>장바구니</button>
+                                    <button>구매하기</button>
+                                </div>
+                                <div class="info_box">
+                                    <i>?</i>
+                                    <div>찢어짐, 표지없음</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="itm">
+                        <a href="#">
+                            <div class="img_wrap">
+                                <span class="label label01">국내 도서</span>
+                                <div class="img">
+                                    <img src="../img/main/sample.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="txt">
+                                <p class="title"><span>[중고] </span>여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운</p>
+                                <p class="price">7,000원 <span>3,000원</span></p>
+                                <div class="btn_box">
+                                    <button>장바구니</button>
+                                    <button>구매하기</button>
+                                </div>
+                                <div class="info_box">
+                                    <i>?</i>
+                                    <div>찢어짐, 표지없음</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="itm">
+                        <a href="#">
+                            <div class="img_wrap">
+                                <span class="label label02">외국 도서</span>
+                                <div class="img">
+                                    <img src="../img/main/sample.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="txt">
+                                <p class="title"><span>[중고] </span>여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운</p>
+                                <p class="price">7,000원 <span>3,000원</span></p>
+                                <div class="btn_box">
+                                    <button>장바구니</button>
+                                    <button>구매하기</button>
+                                </div>
+                                <div class="info_box">
+                                    <i>?</i>
+                                    <div>찢어짐, 표지없음</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="itm">
+                        <a href="#">
+                            <div class="img_wrap">
+                                <span class="label label02">외국 도서</span>
+                                <div class="img">
+                                    <img src="../img/main/sample.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="txt">
+                                <p class="title"><span>[중고] </span>여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운</p>
+                                <p class="price">7,000원 <span>3,000원</span></p>
+                                <div class="btn_box">
+                                    <button>장바구니</button>
+                                    <button>구매하기</button>
+                                </div>
+                                <div class="info_box">
+                                    <i>?</i>
+                                    <div>찢어짐, 표지없음</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="itm">
+                        <a href="#">
+                            <div class="img_wrap">
+                                <span class="label label02">외국 도서</span>
+                                <div class="img">
+                                    <img src="../img/main/sample.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="txt">
+                                <p class="title"><span>[중고] </span>여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운</p>
+                                <p class="price">7,000원 <span>3,000원</span></p>
+                                <div class="btn_box">
+                                    <button>장바구니</button>
+                                    <button>구매하기</button>
+                                </div>
+                                <div class="info_box">
+                                    <i>?</i>
+                                    <div>찢어짐, 표지없음</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pagenation_wrap">
+
+                <!-- Paging script goPage() -->
+                <p class="pagenation"><a href="#" data-role="goPage" data-page="1" class="first angle-left-thin" aria-label="Previous"></a><a href="#" data-role="goPage" class="arrow-left" data-page="1" aria-label="dec"></a><strong href="#" class="active" data-role="goPage" data-page="1">1</strong><a href="#" data-role="goPage" data-page="2">2</a><a href="#" data-role="goPage" data-page="3">3</a><a href="#" data-role="goPage" data-page="4">4</a><a href="#" data-role="goPage" data-page="5">5</a><a href="#" data-role="goPage" data-page="6">6</a><a href="#" data-role="goPage" data-page="7">7</a><a href="#" data-role="goPage" data-page="8">8</a><a href="#" data-role="goPage" data-page="9">9</a><a href="#" data-role="goPage" data-page="10">10</a><a href="#" data-role="goPage" class="arrow-right" data-page="2" aria-label="inc"></a><a href="#" data-role="goPage" data-page="11" class="last angle-right-thin" aria-label="Next"></a></p>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="pop_wrap">
+      <div class="popup">
+        <img src="../img/sub/alert.svg" alt="">
+        <h3>로그인이 필요한 서비스입니다.</h3>
+        <p>로그인하러 가시겠습니까?</p>
+        <div class="btn_wrap">
+          <button class="btn01">로그인</button>
+          <button class="btn02">취소</button>
+        </div>
+      </div>
+    </div>-->
+</div>

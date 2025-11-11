@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>알라딘  모음</h1>
+<div th:fragment="bookSelect">
+    <ul>
+        <li th:each="book : ${selbooks}">
+            <hr>
+            <form action="/select" method="post">
+                <img th:src="${book.imgUrl}" width="100" /><br>
+                <strong th:text="${book.title}"></strong> -
+                <span th:text="${book.author}"></span>
+                <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p><br>
+                <p><strong>가격:</strong> <span th:text="${book.price}"></span></p><br>
+                <button type="button"
+                        th:attr="data-title=${book.title}, data-author=${book.author}, data-price=${book.publisher}"
+                        onclick="setBookInfo(this.dataset.title, this.dataset.author, this.dataset.price)">
+                선택
+                </button>
+
+            </form>
+        </li>
+    </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div th:each="book : ${books}">-->
+<!--    <h2 th:text="${book.title}"></h2><br>-->
+<!--    <p><strong>순위:</strong> <span th:text="${book.bno}">위</span></p><br>-->
+<!--    <img th:if="${book.bookImage != null}" th:src="${book.bookImage}" alt="책 이미지" width="120"/><br>-->
+<!--    <p><strong>저자:</strong> <span th:text="${book.author}"></span></p><br>-->
+<!--    <p><strong>가격:</strong> <span th:text="${book.price}"></span></p><br>-->
+
+<!--    <hr/>-->
+<!--</div>-->
+
+</body>
+<script>
+    function loadCategory(category) {
+        fetch(`/books/category?keyword=${category}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('book-list').innerHTML = html;
+            });
+    }
+</script>
+
+</html>

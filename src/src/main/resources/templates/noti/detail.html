@@ -1,0 +1,51 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page noti_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>공지사항</h3>
+            </div>
+            <div class="view">
+                <input type="hidden" class="form-control" name="bno" id="exampleFormControlInput1" value="${board.bno}"
+                       readonly>
+                <div class="top">
+                    <h2>${board.title}</h2>
+                    <div class="info">
+                        <p>
+                            <span>작성일</span><span>
+                                <fmt:formatDate value="${board.postdate}" pattern="yyyy-MM-dd HH:mm:ss" />
+                            </span>
+                        </p>
+                        <p>
+                            <span>조회수</span><span>${board.readcount}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="content">
+                    ${board.content}
+                    <c:if test="${not empty board.sfile}">
+                        <div class="imgBox">
+                            <img src="/uploads/${board.sfile}">
+                        </div>
+                    </c:if>
+                </div>
+                <c:if test="${not empty board.ofile}">
+                    <div class="bottom">
+                        <h3>첨부파일</h3>
+                        <div>
+                            <p>${board.ofile} </p>
+                            <a href="/board/download?ofile=${board.ofile}&sfile=${board.sfile}">
+                                다운로드</a>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+            <div class="btn-wrap">
+                <button type="button" class="btn01">수정하기</button>
+                <button type="button" class="btn02">삭제하기</button>
+                <button type="button" class="btn03">목록보기</button>
+            </div>
+        </div>
+    </div>
+</div>

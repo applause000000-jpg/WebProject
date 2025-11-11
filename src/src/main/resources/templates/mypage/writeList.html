@@ -1,0 +1,68 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page my_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>마이페이지</h3>
+            </div>
+            <div class="flex__box">
+                <div class="sub__nav__wrap">
+                    <div class="sub__nav">
+                        <a href="/mypage/info" class="top">
+                            <p>반갑습니다. <br>
+                                <span th:text="${user.username + '님'}"></span>
+                            </p>
+                        </a>
+                        <ul class="sub__nav__list">
+                            <li class="sub__nav__itm">
+                                <h3>판매</h3>
+                                <a href="/mypage/writeList" class="on">작성한 글</a>
+                                <a href="/mypage/saleComplete">판매 완료 도서</a>
+                            </li>
+                            <li class="sub__nav__itm">
+                                <h3>구매</h3>
+                                <a href="/mypage/orderList">나의 주문내역</a>
+                                <a href="/mypage/payManagement">결제수단관리</a>
+                            </li>
+                            <li class="sub__nav__itm">
+                                <a href="/mypage/withdrawal">계정탈퇴</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="con">
+                    <div class="board_info">
+                        <h3 class="mypage__sub__tit type2">작성한 글</h3>
+                        <div>
+                            <p>총 <span th:text="${productCount}" class="count">0</span> 개의 상품</p>
+                        </div>
+                    </div>
+                    <ul class="my__write__list">
+                        <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}">
+                            <div class="img">
+                                <img th:src="${product.bookImageUrl != null} ? ${product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
+                            </div>
+                            <div class="info_box">
+                                <div class="txt">
+                                    <h3 class="title">[[${product.title}]]</h3>
+                                    <p class="author">[[${product.author}]]</p>
+                                    <div class="price">
+                                        <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">
+                                            <span th:if="${product.isSold}" class="sold">판매 완료</span>
+                                        </p>
+                                        <span>[[${product.realPrice}]]</span>
+                                    </div>
+                                </div>
+                                <div class="btn_wrap">
+                                    <button th:onclick="|location.href='/product/modify?productId=${product.productId}'|" class="btn01" type="button">수정</button>
+                                    <button th:onclick="|location.href='/product/remove?productId=${product.productId}'|" class="btn02" type="button">삭제</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

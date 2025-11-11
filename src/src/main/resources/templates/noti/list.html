@@ -1,0 +1,76 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page noti_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>공지사항</h3>
+            </div>
+            <div class="board_search">
+                <form action="">
+                    <div class="search_con">
+                        <div class="select_box">
+                            <select>
+                                <option>전체</option>
+                                <option>제목</option>
+                                <option>저자</option>
+                            </select>
+                        </div>
+                        <input type="text" value="키워드를 입력해주세요.">
+                        <input type="submit" value="">
+                    </div>
+                </form>
+            </div>
+            <ul class="noti_list">
+                <li class="itm" onclick="location.href='/noti/detail'">
+                    <div class="top">
+                        <span>No.1</span> <span>2025-11-03</span>
+                    </div>
+                    <p class="title">공지사항공지사항</p>
+                    <div class="bottom">
+                        <p>
+                            <span>조회수</span> <span>1</span>
+                        </p>
+                        <a href="#">첨부파일</a>
+                    </div>
+                </li>
+                <li class="itm">
+                    <div class="top">
+                        <span>No.1</span> <span>2025-11-03</span>
+                    </div>
+                    <p class="title">공지사항공지사항</p>
+                    <div class="bottom">
+                        <p>
+                            <span>조회수</span> <span>1</span>
+                        </p>
+                        <a href="#">첨부파일</a>
+                    </div>
+                </li>
+                <li class="itm">
+                    <div class="top">
+                        <span>No.1</span> <span>2025-11-03</span>
+                    </div>
+                    <p class="title">공지사항공지사항</p>
+                    <div class="bottom">
+                        <p>
+                            <span>조회수</span> <span>1</span>
+                        </p>
+                        <a href="#">첨부파일</a>
+                    </div>
+                </li>
+                <li class="itm">
+                    <div class="top">
+                        <span>No.1</span> <span>2025-11-03</span>
+                    </div>
+                    <p class="title">공지사항공지사항</p>
+                    <div class="bottom">
+                        <p>
+                            <span>조회수</span> <span>1</span>
+                        </p>
+                        <a href="#">첨부파일</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

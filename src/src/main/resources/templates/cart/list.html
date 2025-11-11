@@ -1,0 +1,201 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+    <div class="sub_page cart_page">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>장바구니</h3>
+            </div>
+            <div class="cart_wrap">
+                <form class="flex__form" action="/order/pay" method="post">
+                    <input type="hidden" name="cartIds" value="">
+                    <div class="cart_detail">
+                        <!-- 장바구니가 비었을 때 -->
+                        <div class="alert_box" th:if="${#lists.isEmpty(cartItems)}">
+                            <img src="../img/sub/alert.svg" />
+                            <p>
+                                장바구니에 담긴 상품이 없습니다.<br />
+                                다양한 중고서적을 담아보세요.
+                            </p>
+                        </div>
+
+                        <table class="cart__list" th:if="${!#lists.isEmpty(cartItems)}">
+                            <thead>
+                            <tr>
+                                <td><input type="checkbox" id="selectAll"/></td>
+                                <td colspan="2">상품정보</td>
+                                <td>상품금액</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${cartItems}" th:data-price="${item.product.price}"
+                                class="cart__list__detail">
+                                <td><input type="checkbox" class="cart-checkbox" th:value="${item.cartId}"/></td>
+                                <td class="img">
+                                    <img th:src="${item.product.bookImageUrl != null} ? ${item.product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
+                                </td>
+                                <td>
+                                    <a href="#" class="title"
+                                    >[[${item.product.title}]]</a
+                                    >
+                                    <p class="author">[[${item.product.author}]]</p>
+                                    <div class="price_wrap">
+                                        <p class="price"
+                                              th:text="${#numbers.formatInteger(item.product.price, 3, 'COMMA') + '원'}"></p>
+                                        <span th:text="${item.product.realPrice}"></span>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <span class="price"
+                                          data-th-text="${#numbers.formatInteger(item.product.price, 3, 'COMMA') + '원'}"></span><br/>
+                                    <button class="singleOrderBtn" type="button">주문하기</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="3">
+                                    <button class="cart__list__option_btn" type="button" id="deleteSelectedBtn">
+                                        선택상품 삭제
+                                    </button>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="cart_info_wrap">
+                        <div class="cart_info">
+                            <h3>결제 예상금액</h3>
+                            <div>
+                                <span>상품금액</span>
+                                <p id="totalPrice">0 <span>원</span></p>
+                            </div>
+                            <div>
+                                <span>상품 수량</span>
+                                <p id="totalCount">0 <span>개</span></p>
+                            </div>
+                            <div class="total">
+                                <span>총 <span id="checkedCount">0</span> 개</span>
+                                <p id="checkedPrice">0 <span>원</span></p>
+                            </div>
+                            <button
+                                    class="cart__list__orderbtn"
+                                    id="orderSelectedBtn">
+                                주문하기
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /*상품 삭제*/
+            const deleteBtn = document.getElementById('deleteSelectedBtn');
+            deleteBtn?.addEventListener('click', handleDelete);
+
+            function handleDelete() {
+                const selected = getSelectedIds();
+                if (selected.length === 0) return alert("삭제할 상품을 선택하세요");
+
+                fetch('/cart/deleteSelected', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(selected)
+                })
+                    .then(res => res.ok ? location.reload() : alert('삭제 실패'))
+                    .catch(console.error);
+            }
+
+            /*전체 체크 박스 */
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.cart-checkbox');
+            selectAll?.addEventListener('change', () => {
+                checkboxes.forEach(cb => cb.checked = selectAll.checked);
+                updateSummary();
+            });
+
+            checkboxes.forEach(cb => cb.addEventListener('change', updateSummary));
+
+            /*결제, 수량 업데이트 */
+            const totalPriceEl = document.getElementById('totalPrice');
+            const totalCountEl = document.getElementById('totalCount');
+            const checkedPriceEl = document.getElementById('checkedPrice');
+            const checkedCountEl = document.getElementById('checkedCount');
+
+            function updateSummary() {
+                let total = 0, count = 0;
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        count++;
+                        total += parseInt(cb.closest('tr').dataset.price);
+                    }
+                });
+
+                totalCountEl.innerHTML = `${count} <span>개</span>`;
+                checkedCountEl.textContent = count;
+                totalPriceEl.innerHTML = `${total.toLocaleString()} <span>원</span>`;
+                checkedPriceEl.innerHTML = `${total.toLocaleString()} <span>원</span>`;
+            }
+
+            updateSummary(); // 초기화
+
+            /* 주문하기 넘어가기 */
+            const form = document.querySelector('.flex__form');
+            const multiOrderBtn = document.getElementById('orderSelectedBtn');
+            const singleOrderBtns = document.querySelectorAll('.singleOrderBtn');
+
+            multiOrderBtn?.addEventListener('click', handleMultiOrder);
+            singleOrderBtns.forEach(btn => btn.addEventListener('click', handleSingleOrder));
+
+            function getSelectedIds() {
+                return Array.from(document.querySelectorAll('.cart-checkbox:checked'))
+                    .map(cb => cb.value);
+            }
+
+            function createHiddenInput(name, value) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                return input;
+            }
+
+            /* 여러 상품 주문 (체크박수로 선택된)*/
+            function handleMultiOrder(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const selected = getSelectedIds();
+                if (selected.length === 0){
+                    alert('주문할 상품을 선택하세요!');
+                    return;
+                }
+                submitOrder(selected);
+            }
+
+            /* 단일 상품 주문 */
+            function handleSingleOrder(e) {
+                e.preventDefault();
+                const cartId = e.target.closest('tr').querySelector('.cart-checkbox').value;
+                submitOrder([cartId]);
+            }
+
+            /* 폼 공통 */
+            function submitOrder(ids) {
+                form.method = 'POST';
+                form.action = '/order/pay';
+                form.querySelectorAll('input[name="cartIds"]').forEach(i => i.remove());
+                form.appendChild(createHiddenInput('cartIds', JSON.stringify(ids)));
+                form.submit();
+            }
+        });
+    </script>
+
+</div>
+
+
