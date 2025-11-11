@@ -36,10 +36,11 @@
                             <table class="">
                                 <tr>
                                     <td>제목</td>
-                                    <td class="flex"><input type="text" name="title" id="titleInput" placeholder="제목을 입력해주세요">
+                                    <td class="flex">
+                                        <input type="text" name="title" id="titleInput" placeholder="제목을 입력해주세요">
                                         <input id="openBtn"  type="button" name="title" value="검색">
-                                        <input type="hidden" id="imgUrlInput" name="imgUrl">
-                                        <input type="hidden" id="priceInput" name="realPrice">
+                                        <input type="text" id="imgUrlInput" name="bookImageUrl">
+                                        <input type="text" id="priceInput" name="realPrice">
                                     </td>
                                 </tr>
                                 <tr>
@@ -92,7 +93,7 @@
                             </table>
                         </div>
                         <div class="btn-wrap">
-                            <button type="button" class="btn03">목록보기</button>
+                            <button type="button" class="btn03" onclick="location.href='/product/list'">목록보기</button>
                             <button type="reset" class="btn02">Reset</button>
                             <button type="submit" class="btn01">책등록</button>
                         </div>
@@ -181,12 +182,13 @@
             console.log("author:", author);
             console.log("publisher:", publisher);
             console.log("price:", price);
+            const cleanPrice = parseInt(price.replace(/\D/g, ""), 10);
             document.getElementById("imgUrlInput").value = imgUrl;
             document.getElementById("titleInput").value = title;
             document.getElementById("authorInput").value = author;
             document.getElementById("publisherInput").value = publisher;
             document.getElementById("priceInput").value = price;
-            document.getElementById("priceInput1").value = price;
+            document.getElementById("priceInput1").value = cleanPrice;
             popup.style.display = "none";
         }
     </script>

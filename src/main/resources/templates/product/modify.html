@@ -1,0 +1,191 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<div layout:fragment="content">
+
+    <div class="sub_page noti_page write">
+        <div class="inner">
+            <div class="sub_top_ttl">
+                <h3>중고도서 수정하기</h3>
+            </div>
+            <div class="wfrm">
+                <div class="frm-box">
+                    <form name="writeFrm" method="post" action="/product/modify" enctype="multipart/form-data"
+                          onsubmit="validateForm(this)" class="wfrm">
+                        <div class="frm_wrap">
+                            <div class="info">
+                                <div class="top">
+                                    <img src="/img/sub/check.png">
+                                    <h3>수정 전 확인해주세요.</h3>
+                                    <p>수정 전, 아래 내용을 한 번만 점검해주시면 원활한 거래에 도움이 됩니다.</p>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <p>실제 보유 도서만<br>등록해주세요.</p>
+                                        <span>등록하신 책은 반드시 직접 보유하고 있는 도서여야 합니다.</span>
+                                    </li>
+                                    <li>
+                                        <p>책 상태를 <br>솔직하게 써주세요.</p>
+                                        <span>밑줄, 낙서, 훼손 등 책의 상태를 정확하게 기재하면 구매자 신뢰를 얻을 수 있습니다.</span>
+                                    </li>
+                                    <li>
+                                        <p>허위 정보 등록은 <br>제한됩니다.</p>
+                                        <span>잘못된 정보를 사용하면 판매가 제한될 수 있습니다.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <table class="">
+                                <tr>
+                                    <input type="hidden" name="productId" th:value="${product.productId}">
+                                    <input type="hidden" name="username" th:value="${product.username}">
+                                    <input type="hidden" name="isSold" th:value="${product.isSold}">
+                                </tr>
+                                <tr>
+                                    <td>제목</td>
+                                    <td class="flex">
+                                        <input type="text" name="title" id="titleInput" th:value="${product.title}" readonly>
+                                        <input type="hidden" id="imgUrlInput" name="bookImageUrl" th:value="${product.bookImageUrl}">
+                                        <input type="text" id="priceInput" name="realPrice"  th:value="${product.realPrice}" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>저자</td>
+                                    <td><input type="text" name="author" id="authorInput" th:value="${product.author}" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td>출판사</td>
+                                    <td><input type="text" name="publisher" id="publisherInput" th:value="${product.publisher}" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td>가격</td>
+                                    <td><input type="text" name="price" id="priceInput1" th:value="${product.price}"></td>
+                                </tr>
+                                <tr>
+                                    <td>도서 상태</td>
+                                    <td class="state">
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='겉표지 손상'
+                                                   th:checked="${#strings.contains(product.conditions, '겉표지 손상')}"/>겉표지 손상
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='밑줄&표시있음'
+                                                   th:checked="${#strings.contains(product.conditions, '밑줄&표시있음')}"/>밑줄&표시있음
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='제본상태불량'
+                                                   th:checked="${#strings.contains(product.conditions, '제본상태불량')}"/>제본상태불량
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='낙장&표지없음'
+                                                   th:checked="${#strings.contains(product.conditions, '낙장&표지없음')}"/>낙장&표지없음
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='도서관&자료실적인'
+                                                   th:checked="${#strings.contains(product.conditions, '도서관&자료실적인')}"/>도서관&자료실적인
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='교사용'
+                                                   th:checked="${#strings.contains(product.conditions, '교사용')}"/>교사용
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='물기&얼룩'
+                                                   th:checked="${#strings.contains(product.conditions, '물기&얼룩')}"/>물기&얼룩
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='세로읽기'
+                                                   th:checked="${#strings.contains(product.conditions, '세로읽기')}"/>세로읽기
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='CD/부록없음'
+                                                   th:checked="${#strings.contains(product.conditions, 'CD/부록없음')}"/>CD/부록없음
+                                        </label>
+                                        <label>
+                                            <input type='checkbox' name='conditions' value='스탬플러자국'
+                                                   th:checked="${#strings.contains(product.conditions, '스탬플러자국')}"/>스탬플러자국
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="btn-wrap">
+                            <button type="button" class="btn03" onclick="location.href='/mypage/writeList'">목록보기</button>
+                            <button type="reset" class="btn02">Reset</button>
+                            <button type="submit" class="btn01">수정하기</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script>
+        const popup = document.getElementById("searchPopup");
+        const openBtn = document.getElementById("openBtn");
+        const closeBtn = document.getElementById("closeBtn");
+
+        openBtn.addEventListener("click", () => {
+            popup.style.display = "block"; // 팝업 보이기
+        });
+
+        closeBtn.addEventListener("click", () => {
+            popup.style.display = "none"; // 팝업 숨기기
+        });
+
+        function searchBooks() {
+            const keyword = document.getElementById("searchKeyword").value;
+
+            fetch("/product/select?message=" + encodeURIComponent(keyword))
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById("searchResults");
+                    [...resultsContainer.querySelectorAll("li")].forEach(li => {
+                        if (li.id !== "closeBtn2") li.remove();
+                    });
+
+                    data.slice(0, 10).forEach(book => {
+                        const li = document.createElement("li");
+                        li.innerHTML = `
+                          <button type="button"
+                                  data-imgurl="${book.imgUrl}"
+                                  data-title="${book.title}"
+                                  data-author="${book.author}"
+                                  data-publisher="${book.publisher}"
+                                  data-price="${book.price}"
+                                  onclick="setBookInfo(this.dataset.imgurl, this.dataset.title, this.dataset.author, this.dataset.publisher, this.dataset.price)">
+                            <div class="img">
+                              <img src="${book.imgUrl}" />
+                            </div>
+                            <div class="text">
+                              <p class="title">${book.title}</p>
+                              <p class="desc">${book.author}</p>
+                              <p class="publi">${book.publisher}</p>
+                              <p class="pric">${book.price}</p>
+                            </div>
+                          </button>
+                        `;
+                        resultsContainer.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error("검색 오류:", error);
+                });
+        }
+        function setBookInfo(imgUrl,title, author, publisher,price) {
+            console.log("📌 setBookInfo 실행됨");
+            console.log("imgUrl:", imgUrl);
+            console.log("title:", title);
+            console.log("author:", author);
+            console.log("publisher:", publisher);
+            console.log("price:", price);
+            const cleanPrice = parseInt(price.replace(/\D/g, ""), 10);
+            document.getElementById("imgUrlInput").value = imgUrl;
+            document.getElementById("titleInput").value = title;
+            document.getElementById("authorInput").value = author;
+            document.getElementById("publisherInput").value = publisher;
+            document.getElementById("priceInput").value = price;
+            document.getElementById("priceInput1").value = cleanPrice;
+            popup.style.display = "none";
+        }
+
+    </script>
+</div>

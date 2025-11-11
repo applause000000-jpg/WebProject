@@ -2,6 +2,8 @@ package com.parket.webproject.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +31,9 @@ public class Cart {
     @JoinColumn(name = "userId")
     private User user;
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "addedAt", nullable = false, updatable = false)
     private LocalDateTime addedAt;
 
     @Column(nullable = false)

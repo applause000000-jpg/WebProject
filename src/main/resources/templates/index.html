@@ -142,7 +142,7 @@
                     <a href="/product/list">바로가기</a>
                 </div>
                 <ul class="used_list animation">
-                    <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}">
+                    <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}" th:if="${!product.isSold}">
                         <div class="img">
                             <img th:src="${product.bookImageUrl != null} ? ${product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
                         </div>
@@ -180,25 +180,11 @@
                     <a href="/noti/list">바로가기</a>
                 </div>
                 <ul class="noti_list animation">
-                    <li class="itm">
+                    <li class="itm" th:each="board : ${noticeList}"
+                        th:onclick="|location.href='@{/noti/detail/{id}(id=${board.idx})}'|">
                         <a href="#">
-                            <h3>거래 관련 사기 주의 안내</h3>
-                            <p class="desc">
-                                거래 관련 사기 주의 안내 거래 관련 사기 주의 안내 거래 관련
-                                사기 주의 안내 거래 관련 사기 주의 안내 거래 관련 사기 주의
-                                안내 거래 관련 사기 주의 안내 거래 관련 사기 주의 안내 거래
-                                관련 사기 주의 안내
-                            </p>
-                        </a>
-                    </li>
-                    <li class="itm">
-                        <a href="#">
-                            <h3>거래 관련 사기 주의 안내</h3>
-                            <p class="desc">
-                                거래 관련 사기 주의 안내 거래 관련 사기 주의 안내 거래 관련
-                                사기 주의 안내 거래 관련 사기 주의 안내 거래 관련 사기 주의
-                                안내 거래 관련 사기 주의 안내 거래 관련 사기 주의 안내 거래
-                                관련 사기 주의 안내
+                            <h3 th:text="${board.title}"></h3>
+                            <p class="desc" th:text="${board.content}">
                             </p>
                         </a>
                     </li>

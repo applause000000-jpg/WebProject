@@ -1,9 +1,11 @@
 package com.parket.webproject.controller.controller;
 
 import com.parket.webproject.domain.CrawlBook;
+import com.parket.webproject.domain.Noti;
 import com.parket.webproject.dto.BookDTO;
 import com.parket.webproject.dto.ProductDTO;
 import com.parket.webproject.repository.BookRepository;
+import com.parket.webproject.service.NotiService;
 import com.parket.webproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +24,8 @@ public class HomeController {
     private BookRepository bookRepository;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private NotiService notiService;
     @GetMapping("/")
     public String home(Model model) {
         List<CrawlBook> allBooks = bookRepository.findAll();
@@ -32,12 +37,22 @@ public class HomeController {
         List<ProductDTO> productLists = products.size() > 4 ? products.subList(0, 4) : products;
         for (ProductDTO product : productLists) {
             Long price = product.getPrice();
-            String realPriceStr = product.getRealPrice();
-            Long realPrice = Long.parseLong(realPriceStr.replaceAll("\\D", ""));
-            Long discount = price - realPrice;
-            String discountText = String.format("%,d원", discount);
+            String discountText="";
+            if (product.getRealPrice() != null ) {
+                String realPriceStr = product.getRealPrice();
+                Long realPrice = Long.parseLong(realPriceStr.replaceAll("\\D", ""));
+                Long discount = price - realPrice;
+                discountText = String.format("%,d원", discount);
+            }else {
+                discountText = "";
+            }
             product.setDiscount(discountText);
         }
+        List<Noti> noticeList = notiService.getAll();
+        if (noticeList == null) noticeList = new ArrayList<>();
+        Collections.reverse(noticeList);
+        noticeList = noticeList.size() > 2 ? noticeList.subList(0, 2) : noticeList;
+        model.addAttribute("noticeList", noticeList);
         model.addAttribute("products", productLists);
         model.addAttribute("books", limitedBooks);
         model.addAttribute("newbooks", newBooklists);
@@ -59,5 +74,4 @@ public class HomeController {
         model.addAttribute("books", limitedBooks);
         return "index :: bookSlider";
     }
-
 }

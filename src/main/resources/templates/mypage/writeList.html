@@ -9,11 +9,11 @@
             <div class="flex__box">
                 <div class="sub__nav__wrap">
                     <div class="sub__nav">
-                        <div class="top">
+                        <a href="/mypage/info" class="top">
                             <p>반갑습니다. <br>
-                                <span></span> 님
+                                <span th:text="${user.username + '님'}"></span>
                             </p>
-                        </div>
+                        </a>
                         <ul class="sub__nav__list">
                             <li class="sub__nav__itm">
                                 <h3>판매</h3>
@@ -35,55 +35,28 @@
                     <div class="board_info">
                         <h3 class="mypage__sub__tit type2">작성한 글</h3>
                         <div>
-                            <p>총 <span class="count">23</span> 개의 상품</p>
+                            <p>총 <span th:text="${productCount}" class="count">0</span> 개의 상품</p>
                         </div>
                     </div>
                     <ul class="my__write__list">
-                        <li class="itm">
+                        <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}">
                             <div class="img">
-                                <img src="../img/main/sample.jpg" alt="">
+                                <img th:src="${product.bookImageUrl != null} ? ${product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
                             </div>
                             <div class="info_box">
                                 <div class="txt">
-                                    <h3 class="title">아주 오래 앉아있는 사람을 위한 책</h3>
-                                    <p class="author">저자,저자,저자,저자,저자,저자,저자</p>
-                                    <span class="price">5,000 원</span>
+                                    <h3 class="title">[[${product.title}]]</h3>
+                                    <p class="author">[[${product.author}]]</p>
+                                    <div class="price">
+                                        <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">
+                                            <span th:if="${product.isSold}" class="sold">판매 완료</span>
+                                        </p>
+                                        <span>[[${product.realPrice}]]</span>
+                                    </div>
                                 </div>
                                 <div class="btn_wrap">
-                                    <button class="btn01" type="button">수정</button>
-                                    <button class="btn02" type="button">삭제</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="itm">
-                            <div class="img">
-                                <img src="../img/main/sample.jpg" alt="">
-                            </div>
-                            <div class="info_box">
-                                <div class="txt">
-                                    <h3 class="title">아주 오래 앉아있는 사람을 위한 책</h3>
-                                    <p class="author">저자,저자,저자,저자,저자,저자,저자</p>
-                                    <span class="price">5,000 원</span>
-                                </div>
-                                <div class="btn_wrap">
-                                    <button class="btn01" type="button">수정</button>
-                                    <button class="btn02" type="button">삭제</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="itm">
-                            <div class="img">
-                                <img src="../img/main/sample.jpg" alt="">
-                            </div>
-                            <div class="info_box">
-                                <div class="txt">
-                                    <h3 class="title">아주 오래 앉아있는 사람을 위한 책</h3>
-                                    <p class="author">저자,저자,저자,저자,저자,저자,저자</p>
-                                    <span class="price">5,000 원</span>
-                                </div>
-                                <div class="btn_wrap">
-                                    <button class="btn01" type="button">수정</button>
-                                    <button class="btn02" type="button">삭제</button>
+                                    <button th:onclick="|location.href='/product/modify?productId=${product.productId}'|" class="btn01" type="button">수정</button>
+                                    <button th:onclick="|location.href='/product/remove?productId=${product.productId}'|" class="btn02" type="button">삭제</button>
                                 </div>
                             </div>
                         </li>

@@ -11,11 +11,11 @@
             <div class="flex__box">
                 <div class="sub__nav__wrap">
                     <div class="sub__nav">
-                        <div class="top">
+                        <a href="/mypage/info" class="top">
                             <p>반갑습니다. <br>
                                 <span th:text="${user.username + '님'}"></span>
                             </p>
-                        </div>
+                        </a>
                         <ul class="sub__nav__list">
                             <li class="sub__nav__itm">
                                 <h3>판매</h3>
@@ -25,7 +25,7 @@
                             <li class="sub__nav__itm">
                                 <h3>구매</h3>
                                 <a href="/mypage/orderList">나의 주문내역</a>
-                                <a href="/mypage/payManagement">결제수단관리</a>
+                                                 <a href="/mypage/payManagement">결제수단관리</a>
                             </li>
                             <li class="sub__nav__itm">
                                 <a href="/mypage/withdrawal">계정탈퇴</a>

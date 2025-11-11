@@ -1,6 +1,7 @@
 package com.parket.webproject.repository;
 
 import com.parket.webproject.domain.CrawlBook;
+import com.parket.webproject.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,4 +32,9 @@ public interface BookRepository extends JpaRepository<CrawlBook, Long> {
 
     @Query("SELECT b FROM CrawlBook b WHERE b.category LIKE :keyword ORDER BY b.bno ASC")
     List<CrawlBook> findByCategoryContaining(@Param("keyword") String keyword);
+
+
+    //product 레파지토리로 가야하긴함
+    @Query("SELECT p FROM Product p WHERE p.title = :title AND p.author = :author")
+    List<Product> detailProduct(@Param("title") String title, @Param("author") String author);
 }

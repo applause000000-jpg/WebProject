@@ -38,7 +38,16 @@ display: flex; align-items: center; justify-content: center; display: block;}
 .header__right .util_box .alarm_area > div p{font-size: 16px; padding: 12px;}
 .header__right .util_box .alarm_area > div p.new{background: #ededed;}
 footer{padding: 20px 0; background: #090B2A; color: #fff; font-size: 15px; text-align: center;}
-.header__right .util_box .alarm_area:hover > div{display: block;}
+.header__right .util_box .alarm_area div.active{display: block;}
+
+/*새 알람 있을 시 */
+/*.new_alarm {*/
+/*    animation: blink 0.8s ease-in-out 2;*/
+/*}*/
+/*@keyframes blink {*/
+/*    0%, 100% { opacity: 100%;}*/
+/*    50% { opacity: 0;}*/
+/*}*/
 
 /*검색창*/
 .hd_search_box{position:absolute; top:100%; left:0; z-index:1; width:100%; background-color:#f4f7fa; height:190px; display:none;}

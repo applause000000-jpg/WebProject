@@ -15,10 +15,12 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
+    private String name;
     @Column(unique = true,nullable = false)
     private String username;
     @Column(nullable = false)
@@ -26,8 +28,4 @@ public class User {
     private String address;
     @Column(nullable = false)
     private String role;
-    @CreationTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Column(nullable = false)
-    private LocalDate createDate;
 }

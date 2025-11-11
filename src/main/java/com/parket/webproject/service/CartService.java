@@ -12,4 +12,5 @@ public interface CartService {
     List<Cart> findByUserId(long userId);
     void deleteSelected(List<Integer> cartIds);
     List<Cart> getSelectedCartItems(List<Integer> cartIds);
+
 }

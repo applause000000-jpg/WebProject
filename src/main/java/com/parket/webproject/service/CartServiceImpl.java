@@ -30,6 +30,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public void addToCart(@AuthenticationPrincipal PrincipalDetails principal, CartDTO cartDTO) {
         User user = principal.getUser();
+        Long productId = cartDTO.getProductId();
+        // 장바구니에 있는지 체크
+        boolean alreadyExists = cartRepository.existsByUser_IdAndProduct_ProductId(user.getId(), productId);
+        if (alreadyExists) {
+            // 이미 있으면 예외 던지기
+            throw new IllegalStateException("이미 장바구니에 존재합니다.");
+        }
 
         Product product = productRepository.findById(cartDTO.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));

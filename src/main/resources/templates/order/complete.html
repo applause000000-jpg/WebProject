@@ -1,4 +1,3 @@
-
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout.html}">
 <div layout:fragment="content">
@@ -7,44 +6,33 @@
             <div class="alert_box type2">
                 <div class="con">
                     <div class="txt">
-                        <img src="../img/sub/pay.png" class="ico"/>
+                        <img src="../img/sub/order.png" class="ico"/>
                         <h3>주문 완료이 완료되었습니다.</h3>
                         <p>
-                            2025.11.03 주문하신 상품의<br />
-                            주문 번호는 <span>939401-33-323432 </span>입니다.
+                            주문 번호는 <span th:text="${orderNo}"></span> 입니다.
                         </p>
                     </div>
                     <ul class="list__info">
-                        <li><span>총 수량</span><p>2개</p></li>
-                        <li><span>총 금액</span><p>10,000원</p></li>
+                        <li><span>총 수량</span>
+                            <p th:text="${totalQuantity} + '개'"></p></li>
+                        <li><span>총 금액</span>
+                            <p th:text="${#numbers.formatInteger(totalPrice,3,'COMMA')} + '원'"></p></li>
                     </ul>
                     <div class="cart__itm__list type2">
-                        <div class="cart__list__itm type2">
+                        <div th:each="history : ${histories}" class="cart__list__itm type2">
                             <div class="img">
                                 <div>
-                                    <img src="../img/main/sample.jpg" alt="" />
+                                    <img th:src="${history.product.bookImageUrl != null} ? ${history.product.bookImageUrl} : '/img/main/sample.jpg'"/>
                                 </div>
                             </div>
                             <div>
-                                <a href="#" class="title">아주오래 앉아있는 사람을 위한책</a>
-                                <p class="author">저자저자저자</p>
-                                <span class="price">3,000원</span><span>119,000</span>
-                            </div>
-                        </div>
-                        <div class="cart__list__itm type2">
-                            <div class="img">
-                                <div>
-                                    <img src="../img/main/sample.jpg" alt="" />
-                                </div>
-                            </div>
-                            <div>
-                                <a href="#" class="title">아주오래 앉아있는 사람을 위한책</a>
-                                <p class="author">저자저자저자</p>
-                                <span class="price">3,000원</span><span>119,000</span>
+                                <a href="#" class="title" th:text="${history.product.title}"></a>
+                                <p class="author" th:text="${history.product.author}"></p>
+<!--                                <span class="price"-->
+<!--                                      th:text="${#numbers.formatInteger(item.product.price,3,'COMMA')} + '원'"></span>-->
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

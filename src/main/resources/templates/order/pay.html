@@ -7,20 +7,27 @@
                 <h3>주문서작성/결제</h3>
             </div>
             <div class="cart_wrap">
-                <form class="flex__form" action="/order/complete" method="post">
-                     <input type="hidden" name="userId" th:value="${member.id}" />
+                <form class="flex__form" action="/order/complete" method="post" id="payForm">
+                    <input type="hidden" name="cartIds" th:value="${cartIdsJson}"/>
+                    <input type="hidden" name="productId" th:value="${orderItems[0].product.productId}" />
+
+                    <input type="hidden" name="userId" th:value="${member.id}" />
+                    <input type="hidden" name="totalPrice" th:value="${totalPrice}" />
+                    <input type="hidden" name="totalQuantity" th:value="${totalQuantity}" />
                     <div class="cart_detail">
                         <div class="cart__itm__list">
                             <div th:each="item : ${orderItems}" class="cart__list__itm">
                                 <div class="img">
-                                    <img src="../img/main/sample.jpg" alt="" />
+                                    <img th:src="${item.product.bookImageUrl != null} ? ${item.product.bookImageUrl} : '/img/main/sample.jpg'" alt="" />
                                 </div>
                                 <div>
                                     <p th:text="${item.product.title}" class="title"></p>
-                                    <p class="author">저자저자저자</p>
-                                    <span class="price"
-                                          th:text="${#numbers.formatInteger(item.product.price, 3, 'COMMA')} + '원'"></span>
-                                    <span>119,000</span>
+                                    <p class="author">[[${item.product.author}]]</p>
+                                    <div class="price_wrap">
+                                        <p class="price"
+                                           th:text="${#numbers.formatInteger(item.product.price, 3, 'COMMA') + '원'}"></p>
+                                        <span th:text="${item.product.realPrice}"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -35,6 +42,35 @@
                                     <span>주소</span>
                                 <input type="text" th:value="${member.address}"/>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="pay__user__info">
+                            <h5>결제 정보</h5>
+                            <div th:if="${!hasPayMethod}" class="no-paymethod-box">
+                                <img th:src="@{'/img/sub/pay.png'}" alt="결제">
+                                <p>등록된 결제수단이 없습니다.</p>
+                                <a href="/mypage/payManagement" class="btn">결제수단 등록하기</a>
+                            </div>
+                            <div th:if="${hasPayMethod}">
+                                <div>
+                                    <span>결제수단</span>
+                                    <input type="text" readonly th:value="${payMethod.methodType}" />
+                                </div>
+                                <div>
+                                    <span>은행</span>
+                                    <input type="text" readonly th:value="${payMethod.bankName}" />
+                                </div>
+                                <div>
+                                    <span>결제수단</span>
+                                    <input type="text" readonly th:value="${payMethod.accountNumber}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pay__user__info">
+                            <h5>결제 방법</h5>
+                            <div class="methodBtnBox">
+                                <button type="button" class="active">일반결제</button>
+                                <button type="button">간편결제</button>
                             </div>
                         </div>
                     </div>
@@ -53,17 +89,121 @@
                                 <span>최종 결제금액</span>
                                 <p data-th-text="${#numbers.formatInteger(totalPrice, 3, 'COMMA') + '원'}">3,0000 <span>원</span></p>
                             </div>
-                            <button
-                                    type="submit"
-                                    name="orderItem"
-                                    value="상품ID"
-                                    class="cart__list__orderbtn">
-                                결제하기
-                            </button>
+                            <div class="pay_btn_wrap">
+                                <button
+                                        id="payBtn"
+                                        type="submit"
+                                        name="orderItem"
+                                        value="상품ID"
+                                        class="cart__list__orderbtn active">
+                                    결제하기
+                                </button>
+                                <button id="easyPayBtn" type="button" class="btn easyPayBtn">간편결제</button>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <div class="pop_wrap" id="payMethodPop">
+        <div class="popup">
+            <img th:src="@{'/img/sub/alert.svg'}" alt="결제">
+            <h3>결제수단이 없습니다!</h3>
+            <p>현재 사용가능한 결제수단이 없습니다.<br>
+                지금 결제수단을 등록하시겠습니까?
+            </p>
+            <div class="btn_wrap">
+                <a class="btn01" href="/mypage/payManagement">결제수단 등록</a>
+                <button class="btn02 cancleBtn">취소</button>
+            </div>
+           <!-- <button class="close_btn" type="button"><img th:src="@{'/img/sub/pay.png'}" alt="결제">
+            </button>-->
+        </div>
+    </div>
+
+    <!-- 간편결제 연동 -->
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script>
+        //결제수단 체크하고 팝업띄우기
+        document.addEventListener('DOMContentLoaded', () => {
+            const payBtn = document.querySelector('#payBtn');
+            const popup = document.querySelector('#payMethodPop');
+            const cancelPopupBtn = document.querySelector('.cancleBtn');
+            const payForm = document.querySelector('#payForm')
+            const easyPayBtn = document.querySelector('#easyPayBtn')
+            const methodBtns = document.querySelectorAll('.methodBtnBox button');
+            const payBtnWraps = document.querySelectorAll('.pay_btn_wrap button');
+
+
+            console.log("🟢 hidden cartIds =", document.querySelector('[name=cartIds]').value);
+
+            // 결제하기 버튼
+            payBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                console.log("결제하기 버튼 클릭됨");
+
+                //결제수단 있는지 뭔지 체크
+                const res = await fetch('/order/pay_check', { method: 'POST' });
+                const result = await res.text();
+
+                console.log("결제수단 확인 결과:", result);
+
+                if (result === 'OK') {
+                    // 결제수단 있으면 결제 진행
+                    console.log("수단 ㅇㅇ");
+                    payForm.submit();
+                } else if (result === 'NO') {
+                    // 결제 수단 없을 때 팝업
+                    popup.style.display = 'flex';
+                } else if (result === 'UNAUTHORIZED') {
+                    alert('로그인이 필요합니다.');
+                    location.href = '/login';
+                }
+            });
+
+            // 간편결제
+            easyPayBtn.addEventListener('click', () => {
+                const IMP = window.IMP;
+                IMP.init("imp19424728"); // 테스트용 코드
+
+                IMP.request_pay({
+                    pg: "html5_inicis", // 카드 결제 기본 테스트
+                    pay_method: "card",
+                    merchant_uid: "ORD-" + new Date().getTime(),
+                    name: "책콕 중고도서 간편결제",
+                    amount: document.querySelector('[name=totalPrice]').value,
+                    buyer_name: document.querySelector('[name=userId]').value,
+                    buyer_addr: document.querySelector('[name=address]')?.value || "",
+                }, function (rsp) {
+                    if (rsp.success) {
+                        console.log("간편결제 성공:", rsp);
+                        payForm.submit(); // 기존 결제 성공페이지 이동 ..
+                    } else {
+                        alert('결제가 취소되었습니다.');
+                        console.error(rsp.error_msg);
+                    }
+                });
+            });
+
+            methodBtns.forEach((btn, i) => {
+                btn.addEventListener('click', () => {
+                    // 전체 active 제거
+                    methodBtns.forEach(b => b.classList.remove('active'));
+                    payBtnWraps.forEach(w => w.classList.remove('active'));
+
+                    // 클릭한 인덱스만 active
+                    btn.classList.add('active');
+                    if (payBtnWraps[i]) payBtnWraps[i].classList.add('active');
+                });
+            });
+
+
+            // 창닫기
+            cancelPopupBtn.addEventListener('click', () => {
+                popup.style.display = 'none';
+            });
+        });
+    </script>
 </div>

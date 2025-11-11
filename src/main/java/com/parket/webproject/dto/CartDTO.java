@@ -1,5 +1,6 @@
 package com.parket.webproject.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -16,4 +17,6 @@ public class CartDTO {
     private long productId;
     private Integer quantity;
     private Timestamp addedAt;
+    @NotNull
+    private String realPrice;
 }

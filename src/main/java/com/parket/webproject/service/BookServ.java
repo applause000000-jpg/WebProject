@@ -12,6 +12,7 @@ public interface BookServ {
     List<BookDTO> CrawlSelectBook(String selectText) throws IOException;
     BookDTO findBookById(Long bno);
 
+
     default BookDTO entityToDTO(CrawlBook crawlBook){
         BookDTO boardDTO = BookDTO.builder()
                 .imgUrl(crawlBook.getBookImage())

@@ -22,7 +22,7 @@
            </div>-->
             <div class="board_info">
                 <div>
-                    <p><span class="count">23</span> 개의 중고상품</p>
+                    <p><span class="count" th:text="${lists.size()}"></span> 개의 중고상품</p>
                 </div>
                 <div class="sort_btn_wrap">
                     <button class="on" type="button">정확도순</button>
@@ -31,61 +31,18 @@
             </div>
             <div class="use_product_wrap">
                 <ul class="use_product_list animation active">
-                    <li class="itm">
-                        <a href="/foreign/detail">
-                            <div class="img_wrap">
-                                <span class="label label01">국내 도서</span>
-                                <div class="img">
-                                    <img src="../img/main/sample.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="txt">
-                                <p class="title"><span>[중고] </span>여름의 비행운</p>
-                                <p class="price">7,000원 <span>3,000원</span></p>
-                                <div class="btn_box">
-                                    <button>장바구니</button>
-                                    <button>구매하기</button>
-                                </div>
-                                <div class="info_box">
-                                    <i>?</i>
-                                    <div>찢어짐, 표지없음</div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="itm">
+                    <li class="itm" th:each="list : ${lists}" th:attr="data-num=${list.productId}" th:if="${!list.isSold}">
                         <a href="#">
                             <div class="img_wrap">
-                                <span class="label label01">국내 도서</span>
+                                <span class="label label01">신간 도서</span>
                                 <div class="img">
-                                    <img src="../img/main/sample.jpg" alt="">
+                                    <img th:src="${list.bookImageUrl}"  alt="">
                                 </div>
                             </div>
                             <div class="txt">
-                                <p class="title"><span>[중고] </span>여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운</p>
-                                <p class="price">7,000원 <span>3,000원</span></p>
-                                <div class="btn_box">
-                                    <button>장바구니</button>
-                                    <button>구매하기</button>
-                                </div>
-                                <div class="info_box">
-                                    <i>?</i>
-                                    <div>찢어짐, 표지없음</div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="itm">
-                        <a href="#">
-                            <div class="img_wrap">
-                                <span class="label label02">외국 도서</span>
-                                <div class="img">
-                                    <img src="../img/main/sample.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="txt">
-                                <p class="title"><span>[중고] </span>여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운 여름의 비행운</p>
-                                <p class="price">7,000원 <span>3,000원</span></p>
+                                <p class="title" th:text="${list.title}"><span>[중고] </span></p>
+                                <p class="price" th:text="${#numbers.formatDecimal(list.price, 0, 'COMMA', 0, 'POINT')} + '원'">
+                                    <span th:text="${list.realPrice}"></span></p>
                                 <div class="btn_box">
                                     <button>장바구니</button>
                                     <button>구매하기</button>
@@ -100,18 +57,135 @@
                 </ul>
             </div>
         </div>
-        <!--
-    <div class="pop_wrap">
-      <div class="popup">
-        <img src="../img/sub/alert.svg" alt="">
-        <h3>로그인이 필요한 서비스입니다.</h3>
-        <p>로그인하러 가시겠습니까?</p>
-        <div class="btn_wrap">
-          <button class="btn01">로그인</button>
-          <button class="btn02">취소</button>
-        </div>
-      </div>
-    </div>-->
-
     </div>
+    <div class="pop_wrap" id="loginPopup">
+        <div class="popup">
+            <img src="../img/sub/alert.svg" alt="">
+            <h3>로그인이 필요한 서비스입니다.</h3>
+            <p>로그인하러 가시겠습니까?</p>
+            <div class="btn_wrap">
+                <a class="btn01 loginBtn" href="/member/login">로그인</a>
+                <a class="btn02 cancle_btn">취소</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop_wrap" id="cartAddPopup">
+        <div class="popup">
+            <img src="../img/sub/alert.svg" alt="">
+            <h3>장바구니 담기 완료!</h3>
+            <p>상품이 장바구니에 담겼습니다.<br>
+                장바구니 페이지로 이동하시겠습니까?
+            </p>
+            <div class="btn_wrap">
+                <a class="btn01" href="/cart/list">장바구니 바로가기</a>
+                <button class="btn02 cancle_btn">취소</button>
+            </div>
+            <!--            <button class="close_btn" type="button"><img src="../img/sub/close.png"></button>-->
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popup = document.querySelector('#cartAddPopup');
+            // const closeBtns = document.querySelector('.close_btn');
+            const cancleBtn = document.querySelectorAll('.cancle_btn');
+            const loginPopup = document.querySelector('#loginPopup');
+            const loginBtn = document.querySelector('.login_btn');
+
+            document.querySelectorAll('.goCart').forEach(button => {
+                button.addEventListener('click', (e) => {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const item = e.target.closest('.itm');
+                    if (!item) return console.error('item not found');
+
+                    const productId = item.dataset.num;
+
+                    //console.log("보낼 productId:", productId, "userId:", userId);
+
+                    fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            productId: productId
+                        }),
+                        redirect: "manual"
+                    })
+                        .then(res => {
+                            console.log("응답 코드:", res.status);
+                            if (res.status === 401 ) { // 비회원시
+                                loginPopup.style.display = 'flex';
+
+                            } else if (res.ok) {
+                                popup.style.display = 'flex';
+                            } else {
+                                alert('이미 장바구니에 존재합니다.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('에러');
+                        });
+                });
+            });
+
+
+            //구매하기 바로가기
+            const buyNowBtn = document.querySelectorAll('.buyNowBtn');
+            buyNowBtn.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // 상품 li.itm 요소 찾기
+                    const item = e.target.closest('.itm');
+                    if (!item) {
+                        console.error('상품 정보를 찾을 수 없습니다.');
+                        return;
+                    }
+
+                    // data-num 속성에서 productId 읽기
+                    const productId = item.dataset.num;
+                    console.log("구매하기 클릭됨 → productId:", productId);
+
+                    // form 생성
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/order/pay';
+
+                    // input 생성
+                    const inputProduct = document.createElement('input');
+                    inputProduct.type = 'hidden';
+                    inputProduct.name = 'productId';
+                    inputProduct.value = productId;
+                    form.appendChild(inputProduct);
+
+                    const inputQty = document.createElement('input');
+                    inputQty.type = 'hidden';
+                    inputQty.name = 'quantity';
+                    inputQty.value = 1;
+                    form.appendChild(inputQty);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            });
+
+            //팝업 닫기
+            document.querySelectorAll('.cancle_btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.pop_wrap').style.display = 'none';
+                });
+            });
+
+            //로긴버튼
+            // document.querySelectorAll('.loginBtn').forEach(btn => {
+            //     btn.addEventListener('click', () => {
+            //         window.location.href = '/member/login';
+            //     });
+            // });
+        });
+    </script>
 </div>

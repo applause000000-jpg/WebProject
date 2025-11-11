@@ -31,6 +31,7 @@ public class ProductDTO {
     // 판매 여부
     private Boolean isSold;
     private String bookImageUrl;
+    private String discount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String discount; //  discount 필드 추가

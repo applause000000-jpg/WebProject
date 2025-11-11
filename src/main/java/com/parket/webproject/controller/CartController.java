@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@org.springframework.stereotype.Controller
+@Controller
 @RequestMapping("/cart")
 @RequiredArgsConstructor
 @Log4j2
@@ -22,6 +23,7 @@ import java.util.List;
 public class CartController {
     private final CartServiceImpl cartService;
 
+    // 장바구니 추가
     @PostMapping("/add")
     @ResponseBody
     public ResponseEntity<String> addToCart( @AuthenticationPrincipal PrincipalDetails principal,
@@ -35,6 +37,7 @@ public class CartController {
         return "cart/list";
     }
 
+    // 장바구니 리스트
     @GetMapping("/list")
     public String cartList(@AuthenticationPrincipal PrincipalDetails principal, Model model) {
         if (principal == null || principal.getUser() == null) {

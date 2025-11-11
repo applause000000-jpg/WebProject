@@ -8,7 +8,7 @@
             </div>
             <div class="cart_wrap">
                 <form class="flex__form" action="/order/pay" method="post">
-                    <input type="hidden" name="cartIdsJson" value="">
+                    <input type="hidden" name="cartIds" value="">
                     <div class="cart_detail">
                         <!-- 장바구니가 비었을 때 -->
                         <div class="alert_box" th:if="${#lists.isEmpty(cartItems)}">
@@ -32,15 +32,19 @@
                                 class="cart__list__detail">
                                 <td><input type="checkbox" class="cart-checkbox" th:value="${item.cartId}"/></td>
                                 <td class="img">
-                                    <img src="../img/main/sample.jpg" alt="magic keyboard"/>
+                                    <img th:src="${item.product.bookImageUrl != null} ? ${item.product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
                                 </td>
                                 <td>
                                     <a href="#" class="title"
                                     >[[${item.product.title}]]</a
                                     >
-                                    <p class="author">저자저자저자</p>
-                                    <span class="price"
-                                          data-th-text="${#numbers.formatInteger(item.product.price, 3, 'COMMA') + '원'}"></span><span>119,000</span>
+                                    <p class="author">[[${item.product.author}]]</p>
+                                    <div class="price_wrap">
+                                        <p class="price"
+                                              th:text="${#numbers.formatInteger(item.product.price, 3, 'COMMA') + '원'}"></p>
+                                        <span th:text="${item.product.realPrice}"></span>
+                                    </div>
+
                                 </td>
                                 <td>
                                     <span class="price"
