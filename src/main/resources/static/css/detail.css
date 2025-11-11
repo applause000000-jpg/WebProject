@@ -1,37 +1,88 @@
-.detail-container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
+/* =========================================== */
+/* 공지사항 상세 페이지 CSS (detail.css 전체) */
+/* =========================================== */
+
+/* body 전체 최소 높이 확보 (푸터와 간격 확보) */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f4; /* 페이지 배경색 */
+}
+
+/* layout fragment content 영역 flex 1로 푸터 밀리지 않도록 */
+div[layout\\:fragment="content"] {
+    flex: 1;
+}
+
+/* 공지사항 상세 컨테이너 */
+.notice-detail-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 25px;
     border: 1px solid #ddd;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin-bottom: 25px; /* 푸터와 간격 */
 }
 
-.detail-container h1 {
+/* 제목 */
+.notice-detail-container h1 {
     font-size: 28px;
     margin-bottom: 15px;
 }
 
-.detail-container p {
+/* 작성자, 날짜, 조회수 */
+.notice-detail-container p {
     font-size: 16px;
     margin-bottom: 10px;
 }
 
-.detail-container .content {
+/* 내용 */
+.notice-detail-container .content {
     margin: 20px 0;
     line-height: 1.6;
 }
 
-.detail-container .btn-box {
-    margin-top: 30px;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
+/* 첨부 파일 */
+.notice-detail-container .file-section {
+    margin-top: 15px;
 }
 
-/* a 태그를 버튼처럼 사용할 경우 */
-.detail-container .btn-box .btn {
+/* 첨부 이미지 박스 */
+.notice-detail-container .image-box {
+    width: 100%;
+    height: 400px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+/* 이미지 */
+.notice-detail-container .image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* 버튼 박스 */
+.notice-btn-box {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 10px; /* 버튼 간격 */
+    flex-wrap: wrap; /* 화면 좁아지면 줄바꿈 가능 */
+}
+
+/* 버튼 스타일 (a, button 동일 적용) */
+.notice-btn-box .btn,
+.notice-btn-box button {
     padding: 10px 20px;
     border: 1px solid #2f7af4;
     background-color: #fff;
@@ -39,13 +90,20 @@
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none; /* 밑줄 제거 */
-    display: inline-block;
+    text-decoration: none;
     text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    min-width: 100px; /* 버튼 너비 통일 */
+    transition: all 0.3s ease;
 }
 
-.detail-container .btn-box .btn:hover {
+/* 버튼 호버 효과 */
+.notice-btn-box .btn:hover,
+.notice-btn-box button:hover {
     background-color: #2f7af4;
     color: #fff;
 }

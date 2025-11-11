@@ -1,48 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+
 <head>
+    <meta charset="UTF-8"/>
     <title>공지사항 상세</title>
-    <link rel="stylesheet" th:href="@{/css/detail.css}">
+
+    <!-- Layout CSS -->
+    <link rel="stylesheet" th:href="@{/css/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/sub.css}"/>
+    <!-- Detail CSS -->
+    <link rel="stylesheet" th:href="@{/css/detail.css}"/>
 </head>
+
 <body>
-<div class="detail-container">
-    <h1 th:text="${board.title}">공지사항 제목</h1>
-    <p class="writer">작성자: <span th:text="${board.writer}">작성자 이름</span></p>
-    <p class="date">작성일: <span th:text="${#temporals.format(board.indate, 'yyyy-MM-dd')}">2025-11-08</span></p>
-    <p class="views">조회수: <span th:text="${board.count}">0</span></p>
 
-    <div class="content" th:utext="${board.content}"></div>
+<div layout:fragment="content">
+    <div class="notice-detail-container">
+        <h1 th:text="${board.title}">공지사항 제목</h1>
 
-    <div class="file-section" th:if="${board.sfile != null}">
-        <p>첨부 파일:
-            <a th:href="@{'/upload/' + ${board.sfile}}" th:text="${board.ofile}">파일명</a>
-        </p>
-    </div>
-<!--
-    <div class="list-top-btn" sec:authorize="hasRole('ADMIN')">
-        <button class="btn" th:onclick="'location.href=\'/noti/add\';'">작성</button>
-    </div> -->
-    <!-- 업로드 이미지 표시 -->
-    <p th:if="${board.sfile != null}">
-        <img th:src="@{/uploads/{file}(file=${board.sfile})}"
-             alt="첨부 이미지"
-             style="max-width:400px;"/>
-    </p>
+        <p class="writer">작성자: <span th:text="${board.writer}">작성자</span></p>
+        <p class="date">작성일: <span th:text="${#temporals.format(board.indate,'yyyy-MM-dd')}">2025-11-08</span></p>
+        <p class="views">조회수: <span th:text="${board.count}">0</span></p>
 
+        <div class="content" th:utext="${board.content}"></div>
 
-    <div class="btn-box">
-        <button class="btn" onclick="location.href='/noti/list'">목록으로</button>
+        <!-- 첨부 파일 -->
+        <div class="file-section" th:if="${board.sfile != null}">
+            <p>첨부 파일:
+                <a th:href="@{'/upload/' + ${board.sfile}}" th:text="${board.ofile}">파일명</a>
+            </p>
+        </div>
 
+        <!-- 이미지 박스 -->
+        <div class="image-box" th:if="${board.sfile != null}">
+            <img th:src="@{/uploads/{file}(file=${board.sfile})}" alt="첨부 이미지"/>
+        </div>
 
-        <!-- 로그인한 ADMIN만 보이도록 -->
-        <div sec:authorize="hasRole('ADMIN')">
-            <a class="btn" th:href="@{/noti/noticeModify/{idx}(idx=${board.idx})}">수정</a>
-            <a class="btn" th:href="@{/noti/delete/{idx}(idx=${board.idx})}">삭제</a>
+        <!-- 버튼 -->
+        <div class="notice-btn-box">
+            <button class="btn" onclick="location.href='/noti/list'">목록으로</button>
+            <a class="btn" th:href="@{/noti/noticeModify/{idx}(idx=${board.idx})}" sec:authorize="hasRole('ADMIN')">수정</a>
+            <a class="btn" th:href="@{/noti/delete/{idx}(idx=${board.idx})}" sec:authorize="hasRole('ADMIN')">삭제</a>
         </div>
     </div>
 </div>
 
-<script th:src="@{/js/detail.js}"></script>
 </body>
 </html>

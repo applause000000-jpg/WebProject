@@ -1,89 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
 <head>
     <meta charset="UTF-8">
     <title>공지사항 수정</title>
 
-    <!-- CSS 적용 (버튼 스타일은 기존대로 유지) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"/>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="../css/reset.css"/>
-    <link rel="stylesheet" href="../css/common.css"/>
-    <link rel="stylesheet" href="/css/main.css"/>
-    <link rel="stylesheet" href="/css/sub.css"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/noti-button.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/noti.css}">
+    <!-- CSS 적용 (기존 스타일 유지) -->
+    <link rel="stylesheet" th:href="@{/css/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/sub.css}"/>
+    <link rel="stylesheet" th:href="@{/css/noti-button.css}"/>
+    <link rel="stylesheet" th:href="@{/css/noti.css}"/>
 </head>
+
 <body>
-<div class="sub_page noti_page write">
-    <div class="inner frm-box">
-        <div class="frm_wrap">
-            <div class="info">
-                <div class="top">
-                    <h3>공지사항 수정</h3>
+<div layout:fragment="content">
+    <div class="sub_page noti_page write">
+        <div class="inner frm-box">
+            <div class="frm_wrap">
+                <div class="info">
+                    <div class="top">
+                        <h3>공지사항 수정</h3>
+                    </div>
                 </div>
+
+                <!-- 공지사항 수정 폼 -->
+                <form th:action="@{/noti/noticeModify/{idx}(idx=${board.idx})}" method="post" enctype="multipart/form-data" class="wfrm">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>제목</td>
+                            <td>
+                                <input type="text" name="title"
+                                       th:value="${board.title}"
+                                       placeholder="제목을 입력해주세요"
+                                       required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>내용</td>
+                            <td>
+                                <textarea name="content" rows="10"
+                                          placeholder="내용을 입력해주세요"
+                                          required
+                                          th:text="${board.content}"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>첨부파일</td>
+                            <td>
+                                <input type="file" name="file" id="fileInput">
+                                <button type="button" id="fileClearBtn">저장 파일 삭제</button>
+                                <input type="hidden" name="deleteFile" id="deleteFileInput" value="false">
+                                <span th:if="${board.ofile != null}">현재 파일: <span th:text="${board.ofile}"></span></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- 기존 업로드된 파일 정보 -->
+                    <p th:if="${board.ofile != null}">
+                        현재 파일: <span th:text="${board.ofile}"></span>
+                        <button type="button" id="existingFileDeleteBtn">삭제</button>
+                    </p>
+
+                    <!-- 이미지 미리보기 -->
+                    <p th:if="${board.sfile != null}">
+                        <img th:src="@{/uploads/{file}(file=${board.sfile})}"
+                             alt="첨부 이미지"
+                             style="max-width:400px; border:1px solid #ccc; border-radius:8px; margin-top:10px;"/>
+                    </p>
+
+                    <!-- 버튼 영역 -->
+                    <div class="btn-wrap">
+                        <button type="submit" class="btn01">수정</button>
+                        <button type="button" class="btn02"
+                                th:onclick="|location.href='@{/noti/detail/{idx}(idx=${board.idx})}'|">취소</button>
+                    </div>
+                </form>
             </div>
-
-            <!-- 공지사항 수정 폼 -->
-            <form th:action="@{/noti/noticeModify/{idx}(idx=${board.idx})}" method="post" enctype="multipart/form-data" class="wfrm">
-                <table>
-                    <tbody>
-                    <tr>
-                        <td>제목</td>
-                        <td>
-                            <input type="text" name="title"
-                                   th:value="${board.title}"
-                                   placeholder="제목을 입력해주세요"
-                                   required>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>내용</td>
-                        <td>
-                            <textarea name="content" rows="10"
-                                      placeholder="내용을 입력해주세요"
-                                      required
-                                      th:text="${board.content}"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>첨부파일</td>
-                        <td>
-                            <input type="file" name="file" id="fileInput">
-                            <button type="button" id="fileClearBtn">저장 파일 삭제</button>
-                            <input type="hidden" name="deleteFile" id="deleteFileInput" value="false">
-                            <span th:if="${board.ofile != null}">현재 파일: <span th:text="${board.ofile}"></span></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <!-- 기존 업로드된 파일 정보 -->
-                <p th:if="${board.ofile != null}">
-                    현재 파일: <span th:text="${board.ofile}"></span>
-                    <button type="button" id="existingFileDeleteBtn">삭제</button>
-                </p>
-
-                <!-- 이미지 미리보기 -->
-                <p th:if="${board.sfile != null}">
-                    <img th:src="@{/uploads/{file}(file=${board.sfile})}"
-                         alt="첨부 이미지"
-                         style="max-width:400px; border:1px solid #ccc; border-radius:8px; margin-top:10px;"/>
-                </p>
-
-                <!-- 버튼 영역 -->
-                <div class="btn-wrap">
-                    <button type="submit" class="btn01">수정</button>
-                    <button type="button" class="btn02"
-                            th:onclick="|location.href='@{/noti/detail/{idx}(idx=${board.idx})}'|">취소</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
 
-<!-- JS 파일 추가 -->
+<!-- JS 파일 -->
 <script type="text/javascript">
     // 새로 선택한 파일 초기화
     document.getElementById("fileClearBtn").addEventListener("click", function() {
@@ -93,8 +97,7 @@
 
     // 기존 업로드 파일 삭제 (화면에서만 제거, 서버 처리 필요)
     document.getElementById('existingFileDeleteBtn')?.addEventListener('click', function() {
-        this.parentElement.style.display = 'none'; // 화면에서 숨김
-        // 서버에서 삭제 처리를 위해 hidden input 추가
+        this.parentElement.style.display = 'none';
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';
         hiddenInput.name = 'deleteExistingFile';
