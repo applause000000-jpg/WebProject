@@ -18,13 +18,14 @@ div[layout\\:fragment="content"] {
 /* 공지사항 상세 컨테이너 */
 .notice-detail-container {
     max-width: 900px;
-    margin: 0 auto;
+    margin: 120px auto 25px; /* ⬅ 헤더 아래로 내리기 위해 상단 여백 추가 */
     padding: 25px;
     border: 1px solid #ddd;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    margin-bottom: 25px; /* 푸터와 간격 */
+    position: relative; /* 레이아웃 겹침 방지 */
+    z-index: 1; /* 헤더 아래에 깔리지 않도록 */
 }
 
 /* 제목 */
