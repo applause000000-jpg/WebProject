@@ -33,4 +33,5 @@ public class ProductDTO {
     private String bookImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String discount; //  discount 필드 추가
 }
