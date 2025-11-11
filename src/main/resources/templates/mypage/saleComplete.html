@@ -35,45 +35,20 @@
                     <div class="board_info">
                         <h3 class="mypage__sub__tit type2">판매 완료 도서</h3>
                         <div>
-                            <p>총 <span class="count">23</span> 개의 상품</p>
+                            <p>총 <span class="count" th:text="${productCount}">0</span> 개의 상품</p>
                         </div>
                     </div>
                     <ul class="my__write__list">
-                        <li class="itm">
+                        <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}">
                             <div class="img">
-                                <img src="../img/main/sample.jpg" alt="">
+                                <img th:src="${product.bookImageUrl != null} ? ${product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
                             </div>
                             <div class="info_box">
                                 <div class="txt">
-                                    <h3 class="title">아주 오래 앉아있는 사람을 위한 책</h3>
-                                    <p class="author">저자,저자,저자,저자,저자,저자,저자</p>
-                                    <span class="price">5,000 원<span>
-                                </div>
-                                <span class="state">판매완료</span>
-                            </div>
-                        </li>
-                        <li class="itm">
-                            <div class="img">
-                                <img src="../img/main/sample.jpg" alt="">
-                            </div>
-                            <div class="info_box">
-                                <div class="txt">
-                                    <h3 class="title">아주 오래 앉아있는 사람을 위한 책</h3>
-                                    <p class="author">저자,저자,저자,저자,저자,저자,저자</p>
-                                    <span class="price">5,000 원<span>
-                                </div>
-                                <span class="state">판매완료</span>
-                            </div>
-                        </li>
-                        <li class="itm">
-                            <div class="img">
-                                <img src="../img/main/sample.jpg" alt="">
-                            </div>
-                            <div class="info_box">
-                                <div class="txt">
-                                    <h3 class="title">아주 오래 앉아있는 사람을 위한 책</h3>
-                                    <p class="author">저자,저자,저자,저자,저자,저자,저자</p>
-                                    <span class="price">5,000 원<span>
+                                    <h3 class="title" th:text="${product.title}"></h3>
+                                    <p class="author" th:text="${product.author}"></p>
+                                    <p class="author" th:text="${product.publisher}"></p>
+                                    <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'"></span>
                                 </div>
                                 <span class="state">판매완료</span>
                             </div>

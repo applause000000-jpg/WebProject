@@ -3,6 +3,7 @@ package com.parket.webproject.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parket.webproject.cofig.author.PrincipalDetails;
+import com.parket.webproject.domain.Product;
 import com.parket.webproject.domain.User;
 import com.parket.webproject.dto.BookDTO;
 import com.parket.webproject.dto.ProductDTO;
@@ -58,6 +59,8 @@ public class ProductController {
         log.info("상품 리스트");
         List<ProductDTO> products = productService.findAllProducts();
         model.addAttribute("products", products);
+        int soldCount = (int) products.stream().filter(product -> Boolean.FALSE.equals(product.getIsSold())).count();
+        model.addAttribute("productCount", soldCount);
         model.addAttribute("principal", principal);
     }
 

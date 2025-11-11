@@ -64,6 +64,10 @@
         },
         loop: true,
     });
+
+    // 버튼 이벤트
+
+
     //카테고리 선택 버튼 및 슬라이더 초기화
     window.loadCategory = function (category) {
         fetch("/index/category?category=" + encodeURIComponent(category))
@@ -113,7 +117,7 @@
         const h = window.innerHeight;
         const targets = document.querySelectorAll('.animation:not(.active)');
         targets.forEach(el => {
-            if (el.getBoundingClientRect().top < h * 0.5) el.classList.add('active');
+            if (el.getBoundingClientRect().top < h * 1) el.classList.add('active');
         });
         if (!document.querySelector('.animation:not(.active)')) {
             window.removeEventListener('scroll', handleScroll);

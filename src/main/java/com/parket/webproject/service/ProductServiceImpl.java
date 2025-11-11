@@ -70,6 +70,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> findSoldProductsByUserId(Long userId) {
+        List<Product> products = productRepository.findByUserId(userId);
+        List<ProductDTO> dtos = new ArrayList<>();
+        for (Product product : products) {
+            if(product.getIsSold() == true){
+                dtos.add(entityToDto(product));
+            }
+        }
+
+        return dtos;
+    }
+
+    @Override
     public ProductDTO findProductById(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
         ProductDTO dto = entityToDto(product);

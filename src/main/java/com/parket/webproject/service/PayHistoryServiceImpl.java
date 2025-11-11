@@ -1,12 +1,15 @@
 package com.parket.webproject.service;
 
 import com.parket.webproject.domain.*;
+import com.parket.webproject.dto.PayHistoryDTO;
+import com.parket.webproject.dto.ProductDTO;
 import com.parket.webproject.repository.PayHistoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,5 +47,16 @@ public class PayHistoryServiceImpl implements PayHistoryService {
                 .build();
 
         payHistoryRepository.save(history);
+    }
+
+    @Override
+    public List<PayHistoryDTO> findPayHistoryByUserId(Long userId) {
+        List<PayHistory> historys = payHistoryRepository.findByUserId(userId);
+        List<PayHistoryDTO> dtos = new ArrayList<>();
+        for (PayHistory history : historys) {
+            dtos.add(entityToDto(history));
+        }
+
+        return dtos;
     }
 }

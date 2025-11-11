@@ -47,14 +47,14 @@
                                 <div class="txt">
                                     <h3 class="title">[[${product.title}]]</h3>
                                     <p class="author">[[${product.author}]]</p>
+                                    <p class="author">[[${product.publisher}]]</p>
                                     <div class="price">
-                                        <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'">
-                                            <span th:if="${product.isSold}" class="sold">판매 완료</span>
-                                        </p>
+                                        <span th:if="${product.isSold}" class="sold">판매 완료</span>
+                                        <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'"></p>
                                         <span>[[${product.realPrice}]]</span>
                                     </div>
                                 </div>
-                                <div class="btn_wrap">
+                                <div class="btn_wrap" th:if="${!product.isSold}">
                                     <button th:onclick="|location.href='/product/modify?productId=${product.productId}'|" class="btn01" type="button">수정</button>
                                     <button th:onclick="|location.href='/product/remove?productId=${product.productId}'|" class="btn02" type="button">삭제</button>
                                 </div>

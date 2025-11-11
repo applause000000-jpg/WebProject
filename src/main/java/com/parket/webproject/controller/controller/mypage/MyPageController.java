@@ -3,8 +3,10 @@ package com.parket.webproject.controller.controller.mypage;
 import com.parket.webproject.cofig.author.PrincipalDetails;
 import com.parket.webproject.domain.PayMethod;
 import com.parket.webproject.domain.User;
+import com.parket.webproject.dto.PayHistoryDTO;
 import com.parket.webproject.dto.ProductDTO;
 import com.parket.webproject.repository.member.MemberRepository;
+import com.parket.webproject.service.PayHistoryService;
 import com.parket.webproject.service.ProductService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/mypage")
@@ -26,11 +29,13 @@ public class MyPageController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberRepository memberRepository;
     private final ProductService productService;
+    private final PayHistoryService payHistoryService;
 
-    public MyPageController(BCryptPasswordEncoder bCryptPasswordEncoder, MemberRepository memberRepository, ProductService productService) {
+    public MyPageController(BCryptPasswordEncoder bCryptPasswordEncoder, MemberRepository memberRepository, ProductService productService, PayHistoryService payHistoryService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.memberRepository = memberRepository;
         this.productService = productService;
+        this.payHistoryService = payHistoryService;
     }
 
     @GetMapping("/info")
@@ -70,6 +75,10 @@ public class MyPageController {
         log.info("판매완료 도서 진입");
         User user = principal.getUser(); // 로그인한 사용자 정보 가져오기
         model.addAttribute("user", user);
+
+        List<ProductDTO> products = productService.findSoldProductsByUserId(user.getId());
+        model.addAttribute("products", products);
+        model.addAttribute("productCount", products.size());
     }
 
     @GetMapping("/writeList")
@@ -88,6 +97,15 @@ public class MyPageController {
         log.info("나의 주문내역 진입");
         User user = principal.getUser(); // 로그인한 사용자 정보 가져오기
         model.addAttribute("user", user);
+
+        List<PayHistoryDTO> payhistorys = payHistoryService.findPayHistoryByUserId(user.getId());
+        model.addAttribute("payhistorys", payhistorys);
+        long uniqueOrderCount = payhistorys.stream()
+                .map(payHistory -> payHistory.getOrderNo())
+                .filter(Objects::nonNull)
+                .distinct()
+                .count();
+
     }
 
     //마이페이지 - 결제수단 등록

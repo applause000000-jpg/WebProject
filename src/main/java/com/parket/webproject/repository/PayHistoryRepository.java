@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PayHistoryRepository extends JpaRepository<PayHistory, Long> {
     List<PayHistory> findByOrderNo(String orderNo);
+    List<PayHistory> findByUserId(Long userId);
 }
