@@ -142,6 +142,17 @@
                     <a href="/product/list">바로가기</a>
                 </div>
                 <ul class="used_list animation">
+                    <!-- 중고도서 없을 때 ..-->
+                    <li class="no_item"
+                        th:if="${#lists.isEmpty(products) or #lists.isEmpty(products.?[!isSold])}" style="width: 100%">
+                        <div class="alert_box" th:if="${#lists.isEmpty(cartItems)}" style="text-align: center">
+                            <img src="../img/sub/alert.svg" />
+                            <p>
+                                등록된 중고서적이 없습니다.<br />
+                                다양한 중고서적을 등록해보세요.
+                            </p>
+                        </div>
+                    </li>
                     <li class="itm" th:each="product : ${products}" th:attr="data-num=${product.productId}" th:if="${!product.isSold}">
                         <div class="img">
                             <img th:src="${product.bookImageUrl != null} ? ${product.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
@@ -157,8 +168,9 @@
                             <p class="desc">
                                 정상판매가보다 <span th:text="${product.discount}"></span> 저렴해요!
                             </p>
-                            <div class="btn_box">
-                                <button class="goCart" type="button">장바구니</button>
+                            <div class="btn_box"
+                                 th:unless="${product.username == principal?.username}">
+                                <button class="on goCart" type="button">장바구니</button>
                                 <button class="buyNowBtn" type="button">구매하기</button>
                             </div>
                             <div class="info_box" th:if="${product.conditions != null}">

@@ -47,10 +47,12 @@
                                 <div class="txt">
                                     <h3 class="title" th:text="${product.title}"></h3>
                                     <p class="author" th:text="${product.author}"></p>
-                                    <p class="author" th:text="${product.publisher}"></p>
-                                    <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'"></span>
-                                </div>
-                                <span class="state">판매완료</span>
+                                    <p class="publisher" th:text="${product.publisher}"></p>
+                                    <div class="price_box">
+                                        <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'"></p>
+                                        <span>[[${product.realPrice}]]</span>
+                                    </div>                                </div>
+                                <span class="sold">판매완료</span>
                             </div>
                         </li>
                     </ul>

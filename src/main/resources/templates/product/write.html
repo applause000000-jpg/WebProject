@@ -39,17 +39,17 @@
                                     <td class="flex">
                                         <input type="text" name="title" id="titleInput" placeholder="제목을 입력해주세요">
                                         <input id="openBtn"  type="button" name="title" value="검색">
-                                        <input type="text" id="imgUrlInput" name="bookImageUrl">
-                                        <input type="text" id="priceInput" name="realPrice">
+                                        <input type="hidden" id="imgUrlInput" name="bookImageUrl">
+                                        <input type="hidden" id="priceInput" name="realPrice">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>저자</td>
-                                    <td><input type="text" name="author" id="authorInput" placeholder="저자를 입력해주세요"></td>
+                                    <td><input type="text" name="author" id="authorInput" placeholder="저자를 입력해주세요" readonly></td>
                                 </tr>
                                 <tr>
                                     <td>출판사</td>
-                                    <td><input type="text" name="publisher" id="publisherInput" placeholder="출판사를 입력해주세요"></td>
+                                    <td><input type="text" name="publisher" id="publisherInput" placeholder="출판사를 입력해주세요" readonly></td>
                                 </tr>
                                 <tr>
                                     <td>가격</td>
@@ -130,6 +130,11 @@
 
         openBtn.addEventListener("click", () => {
             popup.style.display = "flex"; // 팝업 보이기
+            const titleValue = document.getElementById("titleInput").value;
+            if (titleValue) {
+                document.getElementById("searchKeyword").value = titleValue;
+                searchBooks();
+            }
         });
 
         closeBtn.addEventListener("click", () => {

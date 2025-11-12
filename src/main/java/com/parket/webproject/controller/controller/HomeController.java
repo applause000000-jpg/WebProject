@@ -1,5 +1,6 @@
 package com.parket.webproject.controller.controller;
 
+import com.parket.webproject.cofig.author.PrincipalDetails;
 import com.parket.webproject.domain.CrawlBook;
 import com.parket.webproject.domain.Noti;
 import com.parket.webproject.dto.BookDTO;
@@ -8,6 +9,7 @@ import com.parket.webproject.repository.BookRepository;
 import com.parket.webproject.service.NotiService;
 import com.parket.webproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +29,20 @@ public class HomeController {
     @Autowired
     private NotiService notiService;
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(@AuthenticationPrincipal PrincipalDetails principal, Model model) {
         List<CrawlBook> allBooks = bookRepository.findAll();
         List<CrawlBook> limitedBooks = allBooks.size() > 10 ? allBooks.subList(0, 10) : allBooks;
         List<CrawlBook> newBooks = bookRepository.findByBookNewAll();
         List<CrawlBook> newBooklists = newBooks.size() > 10 ? newBooks.subList(0, 10) : newBooks;
         List<ProductDTO> products = productService.findAllProducts();
         Collections.reverse(products);
+        Long userId = null;
+        if (principal != null && principal.getUser() != null) {
+            userId = principal.getUser().getId();
+            model.addAttribute("principal", principal.getUser()); // ✨ 추가
+        } else {
+            model.addAttribute("principal", null);
+        }
         List<ProductDTO> productLists = products.size() > 4 ? products.subList(0, 4) : products;
         for (ProductDTO product : productLists) {
             Long price = product.getPrice();

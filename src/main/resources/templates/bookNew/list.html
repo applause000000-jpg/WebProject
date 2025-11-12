@@ -34,7 +34,7 @@
             <div class="product_wrap">
                 <ul class="product_list">
                     <li class="itm" th:each="book : ${books}">
-                        <a th:href="@{/foreign/detail(bno=${book.bno})}">
+                        <a th:href="@{/bookNew/detail(bno=${book.bno})}">
                             <div class="img">
                                 <img th:src="${book.bookImage}"  alt="">
                             </div>

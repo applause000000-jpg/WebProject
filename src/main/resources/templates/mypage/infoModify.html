@@ -49,8 +49,10 @@
                             </tr>
                             <tr>
                                 <td>비밀번호 확인</td>
-                                <td><input type="password" id="confirmPassword" placeholder="새 비밀번호를 입력해주세요" class="input_pw"></td>
-                                <p id="passwordMessage" style="color:red; display:none; font-size: 14px" >비밀번호가 일치하지 않습니다.</p>
+                                <td><input type="password" id="confirmPassword" placeholder="새 비밀번호를 입력해주세요" class="input_pw">
+                                    <p id="passwordMessage" style="color:red; display:none; font-size: 14px; margin-top: 4px;" >비밀번호가 일치하지 않습니다.</p>
+                                </td>
+
                             </tr>
                             <tr>
                                 <td>주소</td>
@@ -58,7 +60,7 @@
                             </tr>
                         </table>
                         <div class="btn_wrap">
-                            <button type="button" onclick="location.href='/mypage/info'" class="btn01">마이페이지</button>
+                            <button type="button" onclick="location.href='/mypage/info'" class="btn01">전으로</button>
                             <button type="submit" id="submitBtn" class="btn01" disabled>회원정보수정</button>
                         </div>
                     </form>
@@ -66,8 +68,6 @@
             </div>
         </div>
     </div>
-</div>
-<div layout:fragment="script">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const password = document.getElementById("password");

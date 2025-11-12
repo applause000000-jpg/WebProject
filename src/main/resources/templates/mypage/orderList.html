@@ -35,54 +35,36 @@
                     <div class="board_info">
                         <h3 class="mypage__sub__tit type2">나의 주문내역</h3>
                         <div>
-                            <p>총 <span class="count">0</span> 개의 주문내역</p>
+                            <p>총 <span class="count" th:text="${orderCount}">0</span> 개의 주문내역</p>
                         </div>
                     </div>
                     <table class="order__list">
                         <thead>
-                        <tr>
-                            <td>주문번호</td>
-                            <td>이미지</td>
-                            <td>상품정보</td>
-                            <td>가격</td>
-                        </tr>
+                            <tr>
+                                <td>주문번호</td>
+                                <td>이미지</td>
+                                <td>상품정보</td>
+                                <td>가격</td>
+                            </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td class="order_info" rowspan="2">
-                                <span class="date">2025-11-13</span>
-                                <span class="order_num">[58787-4421354]</span>
-                            </td>
-                            <td class="order_thum">
-                                <div class="img">
-                                    <img src="../img/main/sample.jpg">
-                                </div>
-                            </td>
-                            <td class="title">책제목책제목책제목책제목</td>
-                            <td class="price">4,000원</td>
-                        </tr>
-                        <tr>
-                            <td class="order_thum">
-                                <div class="img">
-                                    <img src="../img/main/sample.jpg">
-                                </div>
-                            </td>
-                            <td class="title">책제목책제목책제목책제목</td>
-                            <td class="price">4,000원</td>
-                        </tr>
-                        <tr>
-                            <td class="order_info" rowspan="1">
-                                <span class="date">2025-11-13</span>
-                                <span class="order_num">[58787-4421354]</span>
-                            </td>
-                            <td class="order_thum">
-                                <div class="img">
-                                    <img src="../img/main/sample.jpg">
-                                </div>
-                            </td>
-                            <td class="title">책제목책제목책제목책제목</td>
-                            <td class="price">4,000원</td>
-                        </tr>
+                        <tbody th:each="entry : ${orderGroup}">
+                            <tr th:each="item, iterStat : ${entry.value}">
+                                <td class="order_info" th:if="${iterStat.first}" th:rowspan="${#lists.size(entry.value)}">
+                                    <span class="date" th:text="${#temporals.format(item.created_at, 'yyyy-MM-dd')}"></span>
+                                    <span class="order_num" th:text="${entry.key}"></span>
+                                </td>
+                                <td class="order_thum">
+                                    <div class="img">
+                                        <img th:src="${item.bookImageUrl != null} ? ${item.bookImageUrl} : '/img/main/sample.jpg'" alt="도서 이미지">
+                                    </div>
+                                </td>
+                                <td class="content">
+                                    <h3 class="title">[[${item.title}]]</h3><br>
+                                    <span class="author">[[${item.author}]]</span><br>
+                                    <span class="publisher">[[${item.publisher}]]</span>
+                                </td>
+                                <td class="price" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + '원'"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

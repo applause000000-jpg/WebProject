@@ -47,9 +47,8 @@
                                 <div class="txt">
                                     <h3 class="title">[[${product.title}]]</h3>
                                     <p class="author">[[${product.author}]]</p>
-                                    <p class="author">[[${product.publisher}]]</p>
-                                    <div class="price">
-                                        <span th:if="${product.isSold}" class="sold">판매 완료</span>
+                                    <p class="publisher">[[${product.publisher}]]</p>
+                                    <div class="price_box">
                                         <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '원'"></p>
                                         <span>[[${product.realPrice}]]</span>
                                     </div>
@@ -59,6 +58,7 @@
                                     <button th:onclick="|location.href='/product/remove?productId=${product.productId}'|" class="btn02" type="button">삭제</button>
                                 </div>
                             </div>
+                            <span th:if="${product.isSold}" class="sold">판매 완료</span>
                         </li>
                     </ul>
                 </div>

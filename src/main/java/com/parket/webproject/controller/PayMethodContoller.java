@@ -6,9 +6,7 @@ import com.parket.webproject.domain.PayMethod;
 import com.parket.webproject.domain.User;
 import com.parket.webproject.service.PayMethodService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +26,7 @@ public class PayMethodContoller {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("payMethod", new PayMethod());
-        return "/mypage/payManagement"; // templates/pay/register.html
+        return "payRegister"; // templates/pay/register.html
     }
 
     // 등록 처리

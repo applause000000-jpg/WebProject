@@ -1,5 +1,6 @@
 package com.parket.webproject.controller.controller.foreign;
 
+import com.parket.webproject.cofig.author.PrincipalDetails;
 import com.parket.webproject.domain.Product;
 import com.parket.webproject.dto.BookDTO;
 import com.parket.webproject.dto.ProductDTO;
@@ -7,6 +8,7 @@ import com.parket.webproject.repository.BookRepository;
 import com.parket.webproject.service.BookService;
 import com.parket.webproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,11 +41,12 @@ public class ForeignController {
         } else if ("a".equals(type)) {
             model.addAttribute("books", bookRepository.findByAuthorSearchAll("%" + bookType + "%","%" + keyword + "%"));
         }
+        model.addAttribute("type", type);
         model.addAttribute("keyword", keyword);
         return "foreign/list";  // templates/foreign/list.html
     }
     @GetMapping("/detail")
-    public String detail(Long bno, Model model) {
+    public String detail(Long bno, @AuthenticationPrincipal PrincipalDetails principal, Model model) {
         BookDTO book = bookService.findBookById(bno);
         model.addAttribute("book", book);
         // product repository로 변경해야할수도있음.
@@ -53,6 +56,7 @@ public class ForeignController {
             lists.add(productService.entityToDto(p));
         }
         model.addAttribute("lists", lists);
+        model.addAttribute("principal", principal);
         return "foreign/detail"; // templates/use/list.html 파일을 렌더링
     }
 }

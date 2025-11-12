@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/mypage")
@@ -99,13 +101,16 @@ public class MyPageController {
         model.addAttribute("user", user);
 
         List<PayHistoryDTO> payhistorys = payHistoryService.findPayHistoryByUserId(user.getId());
-        model.addAttribute("payhistorys", payhistorys);
-        long uniqueOrderCount = payhistorys.stream()
-                .map(payHistory -> payHistory.getOrderNo())
-                .filter(Objects::nonNull)
-                .distinct()
-                .count();
+        // 주문번호별 그룹화
+        Map<String, List<PayHistoryDTO>> groupByOrderNo = payhistorys.stream()
+                .collect(Collectors.groupingBy(PayHistoryDTO::getOrderNo));
+        model.addAttribute("orderGroup", groupByOrderNo);
 
+        // 주문내역 개수
+        long OrderCount = payhistorys.stream()
+                .map(payHistory -> payHistory.getOrderNo())
+                .filter(Objects::nonNull).distinct().count();
+        model.addAttribute("orderCount", OrderCount);
     }
 
     //마이페이지 - 결제수단 등록

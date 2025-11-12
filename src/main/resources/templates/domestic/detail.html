@@ -45,13 +45,13 @@
                                 <p class="price" th:text="${#numbers.formatDecimal(list.price, 0, 'COMMA', 0, 'POINT')} + '원'">
                                     <span th:text="${list.realPrice}"></span></p>
                                 <div class="btn_box"
-                                     th:if="${principal == null or product.username != principal.user.username}">
+                                     th:if="${principal == null or !list.username.equals(principal.user.username)}">
                                     <button class="on goCart" type="button">장바구니</button>
                                     <button class="buyNowBtn" type="button">구매하기</button>
                                 </div>
-                                <div class="info_box">
+                                <div class="info_box" th:if="${list.conditions != null}">
                                     <i>?</i>
-                                    <div>찢어짐, 표지없음</div>
+                                    <div th:text="${list.conditions}">찢어짐, 표지없음</div>
                                 </div>
                             </div>
                         </a>

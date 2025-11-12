@@ -109,7 +109,7 @@ mainPage
 .main .best_book_list .itm .img img{width: 100%; height: 100%; object-fit: cover; transition: all .3s;}
 .main .best_book_list .itm:hover .img img{transform: scale(1.1);}
 .main .best_book_list .itm .tit{ background: #fff; font-size: 18px; color: #555; font-weight: 700; }
-.main .best_book_list .itm .author{margin:10px 0; font-size: 14px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap}
+.main .best_book_list .itm .author{margin: 6px 0; font-size: 14px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap}
 .main .best_book_list .itm .price{font-size: 16px;}
 
     /*메인 페이지 > 중고상품 */

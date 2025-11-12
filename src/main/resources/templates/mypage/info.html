@@ -38,23 +38,27 @@
                     <table class="info__table">
                         <tr>
                             <td>이름</td>
-                            <td th:text="${user.name}"></td>
+                            <td><input type="text" th:value="${user.name}" readonly> </td>
                         </tr>
                         <tr>
                             <td>아이디</td>
-                            <td th:text="${user.username}"></td>
+                            <td><input type="text" th:value="${user.username}" readonly></td>
                         </tr>
                         <tr>
                             <td>주소</td>
-                            <td th:text="${user.address}"></td>
+                            <td><input type="text" th:value="${user.address}" readonly></td>
                         </tr>
                         <tr>
                             <td>아이디 생성 날짜</td>
-                            <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <input type="text" th:value="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>아이디 수정 날짜</td>
-                            <td th:text="${#temporals.format(user.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <input type="text" th:value="${#temporals.format(user.updatedAt, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                            </td>
                         </tr>
                     </table>
                     <form action="/mypage/infoModify" method="get" class="btn_wrap">

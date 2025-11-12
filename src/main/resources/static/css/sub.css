@@ -1,7 +1,8 @@
 /*서브 공통*/
 .btn_wrap{display: flex; gap: 10px; justify-content: center;}
 .btn_wrap button{padding: 12px 20px; font-size: 15px; cursor: pointer;}
-.btn01{background: #fff; border: 1px solid var(--point-color); color: var(--point-color);}
+.btn01{background: #fff; border: 1px solid var(--point-color); color: var(--point-color); transition: all .3s;}
+.btn01:hover{background: var(--point-color); color: #fff;}
 .btn02{background: #fff; border: 1px solid #ddd;}
 input:focus{outline: 1px solid var(--point-color);}
 
@@ -76,7 +77,7 @@ appearance: none; -webkit-appearance: none;-moz-appearance: none; background: #f
 .board_info p .count{color: var(--point-color); font-weight: 600;}
 
 .alert_box{padding: 50px 0; text-align: center;}
-.alert_box p{font-size: 16px; color: #888; margin-top: 12px;}
+.alert_box p{font-size: 16px; color: #777; margin-top: 12px;}
 .alert_box.type2 {text-align: left;}
 .alert_box.type2 .con{max-width: 600px; margin: 0 auto;}
 .alert_box.type2 .ico{max-width: 50px;}
@@ -131,12 +132,12 @@ border: none; background-size: contain; }
 /* 국내 / 국외 도서 > 리스트 */
 .product_list{display: flex; gap: 40px; flex-wrap: wrap;}
 .product_list .itm{width: calc((100% - 160px) / 5);}
-.product_list .itm .img{height: 300px; overflow: hidden;}
+.product_list .itm .img{height: 280px; overflow: hidden; margin-bottom: 10px;}
 .product_list .itm .img img{width: 100%; height: 100%; object-fit: cover; transition: all .3s;}
 .product_list .itm .img:hover img{transform: scale(1.1);}
-.product_list .itm .title{font-size: 17px; margin: 10px 0;}
-.product_list .itm .author{font-size: 12px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap; width: 100%; display: block;}
-.product_list .itm .price{font-size: 17px; margin-top: 10px; font-weight: 500; font-family: 'GmarketSans';}
+.product_list .itm .title{font-size: 17px; }
+.product_list .itm .author{margin: 6px 0; font-size: 14px; color: #999; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap; width: 100%; display: block;}
+.product_list .itm .price{font-size: 17px;  font-weight: 500; font-family: 'GmarketSans';}
 .product_list .itm .price span{font-size: 15px;}
 
 /* 국내 / 국외 도서 > 상세페이지 */
@@ -351,14 +352,17 @@ color: #000; text-decoration: none; background:url(../img/sub/file.svg) #f8f8f8 
 .my_page .info__table tr{padding: 10px 0; display: flex; align-items: center;}
 .my_page .info__table tr td{font-size: 17px; width: calc(100% - 150px);}
 .my_page .info__table tr > td:first-child{width: 150px;}
-.my_page .info__table tr td input[type="text"]{padding:20px; border-radius: 12px; width: 100%; font-size: 16px;  border:1px solid #ddd;}
+.my_page .info__table tr td input[type="text"],
+.my_page .info__table tr td input[type="password"]
+{padding:20px; border-radius: 12px; width: 100%; font-size: 16px;  border:1px solid #ddd;}
 .my_page .btn_wrap{margin-top: 20px; justify-content: end;}
 .my_page .board_info{padding: 0; border-bottom: 0; padding: 0; margin: 0; margin-bottom: 30px;}
 .my_page .info__table select{padding: 20px; width: 200px; font-size: 16px; border-radius: 12px; outline: none; border: 1px solid #ddd;
     appearance: none; -webkit-appearance: none;-moz-appearance: none; background: #fff; position: relative;}
-
 .my_page .info__table .select_box{position: relative;     width: fit-content;}
 .my_page .info__table .select_box:after{content: ""; display: block; width: 13px; height: 13px; background: url(../img/sub/free-icon-arrow-down-sign-to-navigate-32195.png); position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background-size: 100% auto; }
+.my_page .info__table tr td input[readonly]{background:#f4f4f4;}
+
 
 /*my__write__list*/
 .my__write__list{display: flex; flex-direction: column; gap: 20px;}
@@ -368,8 +372,27 @@ color: #000; text-decoration: none; background:url(../img/sub/file.svg) #f8f8f8 
 .my__write__list .itm .img{width: 100px; height: 120px; overflow: hidden;}
 .my__write__list .itm .info_box{display: flex; justify-content: space-between; flex: 1; align-items: start;}
 .my__write__list .itm .title{font-size: 17px;}
-.my__write__list .itm .author{font-size: 14px; color: #999; margin-top: 10px; margin-bottom: 20px;}
-.my__write__list .itm .price{font-size: 18px;}
+.my__write__list .itm .author{font-size: 14px; color: #999; margin-top: 10px; margin-bottom: 4px;}
+.my__write__list .itm .price_box{margin-top: 10px; display: flex; gap: 4px; align-items: end; }
+.my__write__list .itm .price{font-size: 18px; }
+.my__write__list .itm .price_box span{    font-size: 14px;
+    color: #999;
+    margin-left: 4px;
+    vertical-align: middle;
+    position: relative;}
+.my__write__list .itm .price_box span:after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #999;
+}
+.my__write__list .itm .publisher{font-size: 15px;}
+.my__write__list .itm .sold{font-size: 15px; color: var(--point-color); text-decoration: underline;}
 .my__write__list .itm .info_box .btn_wrap{display: flex; flex-direction: column;}
 .my__write__list .itm .info_box .btn_wrap button{padding: 10px 20px; font-size: 15px;}
 .my__write__list .itm .state{color: var(--point-color); position: relative; font-size: 15px;}
@@ -388,6 +411,7 @@ position: absolute; bottom: 0; left: 0;}
 .order__list .order_thum .img{width: 70px; height: 100px;}
 .order__list .order_thum .img img{width: 100%; height: 100%; object-fit: cover;}
 .order__list .title{vertical-align: top; font-size: 15px;}
+.order__list .publisher{font-size: 14px; color: #999}
 .order__list .price{vertical-align: middle; font-size: 15px;}
 
 

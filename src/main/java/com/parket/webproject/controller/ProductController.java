@@ -7,6 +7,7 @@ import com.parket.webproject.domain.Product;
 import com.parket.webproject.domain.User;
 import com.parket.webproject.dto.BookDTO;
 import com.parket.webproject.dto.ProductDTO;
+import com.parket.webproject.repository.ProductRepository;
 import com.parket.webproject.service.BookService;
 import com.parket.webproject.service.ProductService;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +31,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping("/write")
     public void registerGet() {
@@ -111,6 +114,21 @@ public class ProductController {
         boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
         log.info("상품 삭제 완료");
         return isAdmin ? "redirect:/product/list" : "redirect:/mypage/writeList";
+    }
+
+    // 중고리스트 검색
+    @GetMapping("/search")
+    public String searchDomesticList(String type,String keyword,Model model) {
+        if ("ta".equals(type)) {
+            model.addAttribute("products", productRepository.findByALLSearchAll("%" + keyword + "%"));
+        } else if ("t".equals(type)) {
+            model.addAttribute("products", productRepository.findByTitleSearchAll("%" + keyword + "%"));
+        } else if ("a".equals(type)) {
+            model.addAttribute("products", productRepository.findByAuthorSearchAll("%" + keyword + "%"));
+        }
+        model.addAttribute("type", type);
+        model.addAttribute("keyword", keyword);
+        return "product/list";
     }
 
 }
